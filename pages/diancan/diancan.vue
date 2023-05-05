@@ -94,6 +94,7 @@
 				cuisineCategoryIndex: 0, // 左侧当前下标
 				scrollInto: '', // 子元素id
 				rightTopList: [], // 右侧菜品分类每个的高度
+				topHeight: 0, // 滚动时距离顶部的高度
 			}
 		},
 		methods: {
@@ -128,6 +129,7 @@
 			cuisineCategoryItem(index, cid) {
 				this.cuisineCategoryIndex = index;
 				this.scrollInto = cid;
+				// 解决重复点击返回到原点
 				setTimeout(() => {
 					this.scrollInto = ''
 				}, 200)
@@ -135,6 +137,23 @@
 			// 滚动触发
 			scroLl(event) {
 				// console.log(event);
+				// 滚动时距离顶部的高度
+				let scrollTop = event.detail.scrollTop;
+				console.log('scroll', scrollTop);
+				
+				if(scrollTop >= this.topHeight) {
+					console.log('上拉');
+					if(scrollTop >= this.rightTopList[this.cuisineCategoryIndex]) {
+						this.cuisineCategoryIndex += 1
+					}
+				} else {
+					console.log('下拉');
+					if(scrollTop <= this.rightTopList[this.cuisineCategoryIndex]) {
+						this.cuisineCategoryIndex -= 1
+					}
+				}
+				
+				this.topHeight = scrollTop;
 			}
 		},
 		created() {
