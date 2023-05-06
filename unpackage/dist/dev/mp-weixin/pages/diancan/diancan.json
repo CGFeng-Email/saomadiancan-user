@@ -1,4 +1,6 @@
 {
   "navigationBarTitleText": "点餐",
-  "usingComponents": {}
+  "usingComponents": {
+    "s-h-o-p-p-i-n-g-l-i-s-t": "/pages/diancan/components/shoppingList"
+  }
 }

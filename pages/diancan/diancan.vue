@@ -37,7 +37,7 @@
 									<view class="classify_goods">
 										<!-- 商品图片 -->
 										<view class="goods_image">
-											<image :src="item2.image" mode="widthFix"></image>
+											<image class="img" :src="item2.image"></image>
 										</view>
 										<view class="goods_recommend">
 											<view class="goods_name">
@@ -52,14 +52,15 @@
 										</view>
 										<view class="quantity" :class="item2.salesVolume == 0 ? 'item_right' : ''">
 											<image v-if="item2.salesVolume > 0" src="/static/img/jianhao.png"
-												mode="widthFix"></image>
+												mode="widthFix" @click="goodsReduce(index,index2,item2,item.cid)"></image>
 											<text v-if="item2.salesVolume > 0">{{item2.salesVolume}}</text>
-											<image src="/static/img/jia.png" mode="widthFix"></image>
+											<image src="/static/img/jia.png" mode="widthFix" @click="goodsAdd(index,index2,item2,item.cid)"></image>
 										</view>
 									</view>
 								</block>
 							</view>
 						</blcok>
+						<SHOPPINGLIST></SHOPPINGLIST>
 						<view style="height: 300rpx;"></view>
 					</scroll-view>
 				</view>
@@ -86,7 +87,11 @@
 	import {
 		nextTick
 	} from "vue";
+	import SHOPPINGLIST from './components/shoppingList.vue';
 	export default {
+		components: {
+			SHOPPINGLIST
+		},
 		data() {
 			return {
 				cuisineCategory: [], // 菜品分类类目
@@ -139,21 +144,36 @@
 				// console.log(event);
 				// 滚动时距离顶部的高度
 				let scrollTop = event.detail.scrollTop;
-				console.log('scroll', scrollTop);
+				// console.log('scroll', scrollTop);
 				
 				if(scrollTop >= this.topHeight) {
-					console.log('上拉');
+					// console.log('上拉');
 					if(scrollTop >= this.rightTopList[this.cuisineCategoryIndex]) {
 						this.cuisineCategoryIndex += 1
 					}
 				} else {
-					console.log('下拉');
-					if(scrollTop <= this.rightTopList[this.cuisineCategoryIndex]) {
+					// console.log('下拉');
+					if(scrollTop < this.rightTopList[this.cuisineCategoryIndex -1]) {
 						this.cuisineCategoryIndex -= 1
 					}
 				}
 				
 				this.topHeight = scrollTop;
+			},
+			// 单个商品加
+			goodsAdd(index,index2,item2,cid) {
+				console.log(index, index2, item2, cid);
+				// 结构出当前商品的添加数量
+				const {salesVolume} = item2;
+				const addNum = salesVolume + 1;
+				this.$set(this.cuisineList[index].list[index2],'salesVolume',addNum)
+			},
+			// 单个商品减
+			goodsReduce(index,index2,item2,cid) {
+				// 结构出当前商品的添加数量
+				const {salesVolume} = item2;
+				const addNum = salesVolume - 1;
+				this.$set(this.cuisineList[index].list[index2],'salesVolume',addNum)
 			}
 		},
 		created() {
@@ -265,6 +285,7 @@
 						display: block;
 						width: 150rpx;
 						height: 150rpx;
+						object-fit: cover;
 						border-radius: 10rpx;
 					}
 

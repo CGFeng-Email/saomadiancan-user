@@ -87,6 +87,7 @@
   display: block;
   width: 150rpx;
   height: 150rpx;
+  object-fit: cover;
   border-radius: 10rpx;
 }
 .order_view .common .right .classify_goods .goods_recommend.data-v-89fa5178 {
