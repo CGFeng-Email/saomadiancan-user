@@ -60,14 +60,13 @@
 								</block>
 							</view>
 						</blcok>
-						<SHOPPINGLIST></SHOPPINGLIST>
 						<view style="height: 300rpx;"></view>
 					</scroll-view>
 				</view>
 			</view>
 
 			<!-- 底部 -->
-			<view class="shopping_cart">
+			<view class="shopping_cart" @click="openCartShopingLing">
 				<view class="left_cart" style="width: 115rpx;">
 					<view class="cart">
 						<image src="/static/img/gouwuche.png" mode="widthFix"></image>
@@ -79,6 +78,9 @@
 					<button plain="true" open-type="getUserInfo">选好了</button>
 				</view>
 			</view>
+			
+			<!-- 购物车商品弹窗列表 -->
+			<SHOPPINGLIST v-if="cartShoppingLingShow" :cuisineCartList="cuisineCartList"></SHOPPINGLIST>
 		</view>
 	</view>
 </template>
@@ -100,6 +102,8 @@
 				scrollInto: '', // 子元素id
 				rightTopList: [], // 右侧菜品分类每个的高度
 				topHeight: 0, // 滚动时距离顶部的高度
+				cartShoppingLingShow: false, // 购物车商品弹窗列表显示，隐藏
+				cuisineCartList: [], // 菜品购物车列表
 			}
 		},
 		methods: {
@@ -163,17 +167,71 @@
 			// 单个商品加
 			goodsAdd(index,index2,item2,cid) {
 				console.log(index, index2, item2, cid);
-				// 结构出当前商品的添加数量
+				// 解构出当前商品的添加数量
 				const {salesVolume} = item2;
-				const addNum = salesVolume + 1;
-				this.$set(this.cuisineList[index].list[index2],'salesVolume',addNum)
+				const addNum = Number(salesVolume) + 1;
+				this.$set(this.cuisineList[index].list[index2],'salesVolume',addNum);
+				// 生成删减出菜品购物车列表的菜品对象
+				const cuisineItem = {
+					price: Number(item2.price) * addNum,
+					salesVolume: addNum,
+					_id: item2._id,
+					image: item2.image,
+					name: item2.name,
+					unit: item2.unit,
+					cid
+				}
+				// 添加商品进购物车
+				this.addShoppingCart(cuisineItem)
 			},
 			// 单个商品减
 			goodsReduce(index,index2,item2,cid) {
-				// 结构出当前商品的添加数量
+				// 解构出当前商品的添加数量
 				const {salesVolume} = item2;
-				const addNum = salesVolume - 1;
+				const addNum = Number(salesVolume) - 1;
 				this.$set(this.cuisineList[index].list[index2],'salesVolume',addNum)
+				// 生成添加进菜品购物车列表的菜品对象
+				const cuisineItem = {
+					price: Number(item2.price) * addNum,
+					salesVolume: addNum,
+					_id: item2._id,
+					image: item2.image,
+					name: item2.name,
+					unit: item2.unit,
+					cid
+				}
+				
+				// 添加商品进购物车
+				this.addShoppingCart(cuisineItem, cuisineItem.salesVolume == 0 ? true : false)
+			},
+			// 弹出 购物车菜品列表
+			openCartShopingLing(flag = true) {
+				this.cartShoppingLingShow = flag
+			},
+			// 添加商品进购物车
+			addShoppingCart(cuisineItem, cuisineZero = false) {
+				console.log('cuisineItem', cuisineItem);
+				// 菜品购物车列表 - 空数组，没有数据。
+				if(this.cuisineCartList.length == 0) {
+					this.cuisineCartList.push(cuisineItem)
+				} else {
+					// 菜品购物车列表 - 有数据
+					// 查找菜品购物车列表是否有相同的菜品
+					const cuisineIndex = this.cuisineCartList.findIndex(item => item._id == cuisineItem._id);
+					// console.log('cuisineIndex', cuisineIndex);
+					// cuisineIndex: -1, 没有相同菜品
+					// cuisineIndex: 1, 相同的菜品
+					if(cuisineIndex == -1) {
+						this.cuisineCartList.unshift(cuisineItem)
+					} else {
+						this.$set(this.cuisineCartList[cuisineIndex], 'salesVolume', cuisineItem.salesVolume);
+						this.$set(this.cuisineCartList[cuisineIndex], 'price', cuisineItem.price);
+					}
+					// 过滤掉为0的菜品 当前菜品数量低于0时，在菜品购物车列表删除当前菜品
+					if(cuisineZero) {
+						this.cuisineCartList.splice(cuisineIndex, 1)
+					}
+				}
 			}
 		},
 		created() {
@@ -369,7 +427,7 @@
 			align-items: center;
 			justify-content: space-between;
 			padding: 0 20rpx;
-			z-index: 9;
+			z-index: 11;
 
 			.left_cart {
 				display: flex;

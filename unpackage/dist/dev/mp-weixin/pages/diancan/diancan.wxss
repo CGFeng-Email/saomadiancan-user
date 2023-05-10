@@ -153,7 +153,7 @@
   align-items: center;
   justify-content: space-between;
   padding: 0 20rpx;
-  z-index: 9;
+  z-index: 11;
 }
 .order_view .shopping_cart .left_cart.data-v-89fa5178 {
   display: flex;
