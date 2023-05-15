@@ -232,14 +232,22 @@ var _vue = __webpack_require__(/*! vue */ 25);
 //
 //
 //
+//
+//
 var SHOPPINGLIST = function SHOPPINGLIST() {
   __webpack_require__.e(/*! require.ensure | pages/diancan/components/shoppingList */ "pages/diancan/components/shoppingList").then((function () {
     return resolve(__webpack_require__(/*! ./components/shoppingList.vue */ 55));
   }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
 };
+var SHOPPINGDETAILS = function SHOPPINGDETAILS() {
+  __webpack_require__.e(/*! require.ensure | pages/diancan/components/shoppingDetails */ "pages/diancan/components/shoppingDetails").then((function () {
+    return resolve(__webpack_require__(/*! ./components/shoppingDetails.vue */ 62));
+  }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
+};
 var _default = {
   components: {
-    SHOPPINGLIST: SHOPPINGLIST
+    SHOPPINGLIST: SHOPPINGLIST,
+    SHOPPINGDETAILS: SHOPPINGDETAILS
   },
   data: function data() {
     return {
@@ -257,11 +265,16 @@ var _default = {
       // 滚动时距离顶部的高度
       cartShoppingLingShow: false,
       // 购物车商品弹窗列表显示，隐藏
-      cuisineCartList: [] // 菜品购物车列表
+      cuisineCartList: [],
+      // 菜品购物车列表
+      shoppingDetailsShow: false,
+      // 商品详情 显示
+      shoppingDetailsData: {} // 商品详情数据
     };
   },
 
   methods: {
+    // 获取菜品分类，菜品数据
     getCuisine: function getCuisine() {
       var _this = this;
       return (0, _asyncToGenerator2.default)( /*#__PURE__*/_regenerator.default.mark(function _callee() {
@@ -277,7 +290,7 @@ var _default = {
                 });
               case 2:
                 res = _context.sent;
-                console.log('res', res);
+                // console.log('res', res)
                 _this.cuisineCategory = res.result.getCuisineCategory.data;
                 _this.cuisineList = res.result.objList;
                 // 等待渲染完毕之后 才会执行this.$nextTick
@@ -291,13 +304,13 @@ var _default = {
                     // console.log('res', res);
                     res[0].forEach(function (item) {
                       itemHeight += item.height;
-                      console.log('height', itemHeight);
+                      // console.log('height', itemHeight);
                       _this.rightTopList.push(itemHeight);
                     });
-                    console.log('rightTopList', _this.rightTopList);
+                    // console.log('rightTopList', this.rightTopList);
                   });
                 });
-              case 7:
+              case 6:
               case "end":
                 return _context.stop();
             }
@@ -335,9 +348,13 @@ var _default = {
       }
       this.topHeight = scrollTop;
     },
+    // 右侧菜品列表滚动到底部触发
+    lower: function lower() {
+      console.log('滚动到底部触发');
+    },
     // 单个商品加
-    goodsAdd: function goodsAdd(index, index2, item2, cid) {
-      console.log(index, index2, item2, cid);
+    plus: function plus(index, index2, item2, cid) {
+      // console.log(index, index2, item2, cid);
       // 解构出当前商品的添加数量
       var salesVolume = item2.salesVolume;
       var addNum = Number(salesVolume) + 1;
@@ -350,13 +367,15 @@ var _default = {
         image: item2.image,
         name: item2.name,
         unit: item2.unit,
-        cid: cid
+        cid: cid,
+        index: index,
+        index2: index2
       };
       // 添加商品进购物车
       this.addShoppingCart(cuisineItem);
     },
     // 单个商品减
-    goodsReduce: function goodsReduce(index, index2, item2, cid) {
+    reduce: function reduce(index, index2, item2, cid) {
       // 解构出当前商品的添加数量
       var salesVolume = item2.salesVolume;
       var addNum = Number(salesVolume) - 1;
@@ -369,21 +388,23 @@ var _default = {
         image: item2.image,
         name: item2.name,
         unit: item2.unit,
-        cid: cid
+        cid: cid,
+        index: index,
+        index2: index2
       };
 
-      // 添加商品进购物车
-      this.addShoppingCart(cuisineItem, cuisineItem.salesVolume == 0 ? true : false);
+      // 添加，减少商品进购物车
+      this.addShoppingCart(cuisineItem);
     },
     // 弹出 购物车菜品列表
     openCartShopingLing: function openCartShopingLing() {
       var flag = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : true;
       this.cartShoppingLingShow = flag;
     },
-    // 添加商品进购物车
+    // 添加,减少商品进购物车
     addShoppingCart: function addShoppingCart(cuisineItem) {
-      var cuisineZero = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
-      console.log('cuisineItem', cuisineItem);
+      // console.log('cuisineItem', cuisineItem);
+      // console.log('cuisineCartList', this.cuisineCartList);
       // 菜品购物车列表 - 空数组，没有数据。
       if (this.cuisineCartList.length == 0) {
         this.cuisineCartList.push(cuisineItem);
@@ -402,15 +423,113 @@ var _default = {
           this.$set(this.cuisineCartList[cuisineIndex], 'salesVolume', cuisineItem.salesVolume);
           this.$set(this.cuisineCartList[cuisineIndex], 'price', cuisineItem.price);
         }
-        // 过滤掉为0的菜品 当前菜品数量低于0时，在菜品购物车列表删除当前菜品
-        if (cuisineZero) {
-          this.cuisineCartList.splice(cuisineIndex, 1);
-        }
       }
+
+      // 计算左边菜品类目 各分类下添加了多少菜品
+      this.calculateLeftCuisineCategory();
+    },
+    // 计算左边菜品类目 各分类下添加了多少菜品
+    calculateLeftCuisineCategory: function calculateLeftCuisineCategory() {
+      var _this3 = this;
+      // 计算出各菜品分类id，并且计算出添加的数量
+      var obj = {};
+      this.cuisineCartList.forEach(function (item) {
+        // console.log('item', item);
+        // 有相同的分类就叠加当前分类下的添加菜品数量
+        if (obj[item.cid]) {
+          obj[item.cid] += item.salesVolume;
+        } else {
+          obj[item.cid] = item.salesVolume;
+        }
+      });
+
+      // 处理成数组
+      var arr = [];
+      // 循环对象
+      for (var k in obj) {
+        // console.log('k', k);
+        arr.push({
+          cid: k,
+          salesVolume: obj[k]
+        });
+      }
+
+      // 查询出当前分类菜品索引，更新左侧分类列表，同步左侧菜品分类下的数量
+      arr.forEach(function (item) {
+        // 查找左侧分类下的菜品类目id == 当前菜品类目的id
+        var index = _this3.cuisineCategory.findIndex(function (findItem) {
+          return findItem.cid == item.cid;
+        });
+        // 更新当前菜品
+        _this3.$set(_this3.cuisineCategory[index], 'sele_quantity', item.salesVolume);
+      });
+    },
+    // 购物车菜品加减数量同步
+    cartCuisinePlusReduce: function cartCuisinePlusReduce(parameter) {
+      // console.log('parameter', parameter);
+      // 同步菜品购物车列表数量,价格
+      // 同步数量
+      this.$set(this.cuisineCartList[parameter.cartCuisineIndex], 'salesVolume', parameter.salesVolume);
+      // 同步价格
+      this.$set(this.cuisineCartList[parameter.cartCuisineIndex], 'price', parameter.price * parameter.salesVolume);
+
+      // 同步右侧菜品列表加减数量，价格
+      var index = this.cuisineList.findIndex(function (item) {
+        return item.cid == parameter.cid;
+      });
+      // console.log('index', index);
+      this.$set(this.cuisineList[index].list[parameter.index2], 'salesVolume', parameter.salesVolume);
+
+      // 同步左侧菜品分类点菜数量
+      this.calculateLeftCuisineCategory();
+    },
+    // 购物车 - 清空已点，被子组建调用
+    cartEmpty: function cartEmpty() {
+      // 清空购物车列表
+      this.cuisineCartList = [];
+      // 清空右侧菜品列表
+      // console.log('cuisineList', this.cuisineList);
+      this.cuisineList.forEach(function (item) {
+        item.list.forEach(function (item2) {
+          item2.salesVolume = 0;
+        });
+      });
+      // 清空左侧菜品列表
+      // console.log('cuisineCategory', this.cuisineCategory);
+      this.cuisineCategory.forEach(function (item) {
+        item.sele_quantity = 0;
+      });
+      // 关闭购物车弹窗
+      this.openCartShopingLing(false);
+    },
+    // 打开商品详情
+    openShoppingDetails: function openShoppingDetails() {
+      var open = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : true;
+      var index = arguments.length > 1 ? arguments[1] : undefined;
+      var index2 = arguments.length > 2 ? arguments[2] : undefined;
+      var item2 = arguments.length > 3 ? arguments[3] : undefined;
+      var cid = arguments.length > 4 ? arguments[4] : undefined;
+      this.shoppingDetailsShow = open;
+      this.shoppingDetailsData = {
+        index: index,
+        index2: index2,
+        item2: item2,
+        cid: cid
+      };
     }
   },
   created: function created() {
     this.getCuisine();
+  },
+  computed: {
+    // 计算购物车点菜总数量
+    totalCartCuisineNuumber: function totalCartCuisineNuumber() {
+      var total = 0;
+      this.cuisineCartList.forEach(function (item) {
+        total += item.salesVolume;
+      });
+      return total;
+    }
   }
 };
 exports.default = _default;

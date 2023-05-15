@@ -166,8 +166,27 @@ var _default = {
     cuisineCartList: Array
   },
   methods: {
+    // 调用父组件 关闭购物车弹窗
     hideCartShoppingList: function hideCartShoppingList() {
       this.$parent.openCartShopingLing(false);
+    },
+    // 减少
+    reduce: function reduce(item, cartCuisineIndex) {
+      // console.log('item', item);
+      item.salesVolume = item.salesVolume - 1;
+      item.cartCuisineIndex = cartCuisineIndex;
+      this.$parent.cartCuisinePlusReduce(item);
+    },
+    // 增加
+    plus: function plus(item, cartCuisineIndex) {
+      // console.log('item', item);
+      item.salesVolume = item.salesVolume + 1;
+      item.cartCuisineIndex = cartCuisineIndex;
+      this.$parent.cartCuisinePlusReduce(item);
+    },
+    // 清空已点
+    empty: function empty() {
+      this.$parent.cartEmpty();
     }
   }
 };

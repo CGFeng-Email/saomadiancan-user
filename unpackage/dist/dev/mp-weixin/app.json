@@ -1,5 +1,6 @@
 {
   "pages": [
+    "pages/order_details/order_details",
     "pages/diancan/diancan",
     "pages/index/index"
   ],

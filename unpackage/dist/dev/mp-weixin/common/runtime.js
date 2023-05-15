@@ -105,11 +105,11 @@
 /******/
 /******/
 /******/ 		// mini-css-extract-plugin CSS loading
-/******/ 		var cssChunks = {"pages/diancan/components/shoppingList":1};
+/******/ 		var cssChunks = {"pages/diancan/components/shoppingDetails":1,"pages/diancan/components/shoppingList":1};
 /******/ 		if(installedCssChunks[chunkId]) promises.push(installedCssChunks[chunkId]);
 /******/ 		else if(installedCssChunks[chunkId] !== 0 && cssChunks[chunkId]) {
 /******/ 			promises.push(installedCssChunks[chunkId] = new Promise(function(resolve, reject) {
-/******/ 				var href = "" + ({"pages/diancan/components/shoppingList":"pages/diancan/components/shoppingList"}[chunkId]||chunkId) + ".wxss";
+/******/ 				var href = "" + ({"pages/diancan/components/shoppingDetails":"pages/diancan/components/shoppingDetails","pages/diancan/components/shoppingList":"pages/diancan/components/shoppingList"}[chunkId]||chunkId) + ".wxss";
 /******/ 				var fullhref = __webpack_require__.p + href;
 /******/ 				var existingLinkTags = document.getElementsByTagName("link");
 /******/ 				for(var i = 0; i < existingLinkTags.length; i++) {

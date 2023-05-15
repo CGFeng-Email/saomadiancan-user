@@ -1,9 +1,16 @@
 {
 	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
 		{
+			"path": "pages/order_details/order_details",
+			"style": {
+				"navigationBarTitleText": "订单详情"
+			}
+		},
+		{
 			"path": "pages/diancan/diancan",
 			"style": {
-				"navigationBarTitleText": "点餐"
+				"navigationBarTitleText": "点餐",
+				"navigationBarBackgroundColor": "#fcd267"
 			}
 		},
 		{

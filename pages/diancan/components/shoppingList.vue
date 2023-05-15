@@ -5,10 +5,10 @@
 		<view class="main cart_shoppinglist_anim">
 			<view class="head">
 				<i class="iconfont icon-shanchu"></i>
-				<text>清空已点</text>
+				<text @click="empty">清空已点</text>
 			</view>
 			<scroll-view class="scroll_list" :scroll-y="true" :scroll-with-animation="true">
-				<view class="item" v-for="(item, index) in cuisineCartList" :key="index">
+				<view class="item" v-for="(item, cartCuisineIndex) in cuisineCartList" :key="cartCuisineIndex" v-if="item.salesVolume > 0">
 					<image class="cover" :src="item.image"></image>
 					<view class="content">
 						<view class="name">
@@ -19,12 +19,12 @@
 						</view>
 					</view>
 					<view class="function">
-						<i class="iconfont icon-jian"></i>
+						<i class="iconfont icon-jian" @click="reduce(item,cartCuisineIndex)"></i>
 						<text>{{item.salesVolume}}</text>
-						<i class="iconfont icon-zengjia"></i>
+						<i class="iconfont icon-zengjia" @click="plus(item,cartCuisineIndex)"></i>
 					</view>
 				</view>
-				<view class="hint" style="height: 200rpx;">{{this.cuisineCartList.length == 0 ? '客观没有更多了哦' : ''}}</view>
+				<view class="hint" style="height: 200rpx;">{{this.cuisineCartList.length == 0 ? '客观赶快去添加菜品吧' : ''}}</view>
 			</scroll-view>
 		</view>
 	</view>
@@ -34,8 +34,27 @@
 	export default {
 		props: {cuisineCartList:Array},
 		methods: {
+			// 调用父组件 关闭购物车弹窗
 			hideCartShoppingList() {
 				this.$parent.openCartShopingLing(false)
+			},
+			// 减少
+			reduce(item,cartCuisineIndex) {
+				// console.log('item', item);
+				item.salesVolume = item.salesVolume - 1
+				item.cartCuisineIndex = cartCuisineIndex
+				this.$parent.cartCuisinePlusReduce(item)
+			},
+			// 增加
+			plus(item, cartCuisineIndex) {
+				// console.log('item', item);
+				item.salesVolume = item.salesVolume + 1
+				item.cartCuisineIndex = cartCuisineIndex
+				this.$parent.cartCuisinePlusReduce(item)
+			},
+			// 清空已点
+			empty() {
+				this.$parent.cartEmpty()
 			}
 		}
 	}
