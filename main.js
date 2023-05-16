@@ -7,7 +7,9 @@ import 'static/css/common.css';
 Vue.config.productionTip = false
 App.mpType = 'app'
 
-
+import moment from 'moment';
+moment.locale('zh-cn');
+Vue.prototype.$Time = moment;
 
 const app = new Vue({
 	...App

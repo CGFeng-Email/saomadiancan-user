@@ -1,6 +1,7 @@
 <!-- 购物车商品详情 -->
 <template>
 	<view class="shopping_details">
+		<view class="shadow" @click="closeShoppingDetails"></view>
 		<view class="details cart_shoppinglist_anim">
 			<image class="cover" :src="shoppingDetailsData.item2.image" mode="aspectFit"></image>
 			<view class="content">
@@ -61,12 +62,15 @@
 
 <style lang="less" scoped>
 	.shopping_details {
-		position: fixed;
-		top: 0;
-		left: 0;
-		right: 0;
-		bottom: 0;
-		background: rgba(0,0,0,.6);
+		.shadow {
+			position: fixed;
+			top: 0;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			background: rgba(0,0,0,.6);
+		}
+		
 		.details {
 			height: 850rpx;
 			background: #fefefe;

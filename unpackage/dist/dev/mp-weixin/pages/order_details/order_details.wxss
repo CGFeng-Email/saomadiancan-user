@@ -17,7 +17,7 @@
   z-index: -1;
 }
 .order_details .head.data-v-8cff30ac {
-  padding: 30rpx 20rpx 0;
+  padding: 40rpx 20rpx 20rpx 40rpx;
 }
 .order_details .head .title.data-v-8cff30ac {
   font-size: 38rpx;
@@ -25,15 +25,24 @@
 }
 .order_details .head .sub_title.data-v-8cff30ac {
   font-size: 30rpx;
-  margin-top: 10rpx;
+  margin-top: 20rpx;
 }
 .order_details .order_list.data-v-8cff30ac {
   padding: 20rpx;
 }
 .order_details .order_list .order_content.data-v-8cff30ac {
   background: #fff;
-  border-radius: 20rpx;
+  border-radius: 10rpx;
   box-shadow: 0 0 14rpx 10rpx rgba(0, 0, 0, 0.1);
+}
+.order_details .order_list .order_content .order_list_content.data-v-8cff30ac {
+  height: 520rpx;
+  overflow-y: hidden;
+  transition: all 0.4s ease;
+}
+.order_details .order_list .order_content .order_list_up.data-v-8cff30ac {
+  height: auto;
+  overflow-y: auto;
 }
 .order_details .order_list .order_content .item.data-v-8cff30ac {
   margin-bottom: 20rpx;
@@ -85,5 +94,60 @@
 .order_details .order_list .order_content .item .list .l_item .content .shopping_number.data-v-8cff30ac {
   font-size: 28rpx;
   color: #999;
+}
+.order_details .order_list .more.data-v-8cff30ac {
+  text-align: center;
+  font-size: 28rpx;
+  color: #999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.order_details .order_list .more .text.data-v-8cff30ac {
+  padding: 40rpx 0;
+}
+.order_details .order_list .more .iconfont.data-v-8cff30ac {
+  padding-left: 4rpx;
+}
+.order_details .order_list .total_account.data-v-8cff30ac {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 30rpx 20rpx;
+  font-size: 34rpx;
+}
+.order_details .order_list .total_account .number.data-v-8cff30ac {
+  color: #999;
+}
+.order_details .order_list .total_account .total_price.data-v-8cff30ac {
+  padding-left: 20rpx;
+}
+.order_details .bottom_order.data-v-8cff30ac {
+  padding: 20rpx;
+}
+.order_details .bottom_order .info.data-v-8cff30ac {
+  padding: 30rpx 20rpx;
+  background: #fff;
+  border-radius: 10rpx 10rpx 0 0;
+}
+.order_details .bottom_order .lis.data-v-8cff30ac {
+  font-size: 30rpx;
+  color: #999;
+  line-height: 34rpx;
+  margin-bottom: 20rpx;
+}
+.order_details .bottom_order .btn.data-v-8cff30ac {
+  display: flex;
+  justify-content: flex-end;
+  padding: 30rpx 0;
+}
+.order_details .bottom_order .btn .add_order.data-v-8cff30ac {
+  width: 220rpx;
+  height: 80rpx;
+  background: #fcd267;
+  text-align: center;
+  line-height: 80rpx;
+  font-size: 36rpx;
+  border-radius: 46rpx;
 }
 

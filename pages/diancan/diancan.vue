@@ -75,7 +75,7 @@
 				</view>
 				<view class="text" v-if="totalCartCuisineNuumber > 0">已点{{totalCartCuisineNuumber}}份菜品</view>
 				<view class="place_btn">
-					<button plain="true" open-type="getUserInfo">选好了</button>
+					<button plain="true" open-type="getUserInfo" @click.stop="totalCartCuisineNuumber == 0 ? false : true && submit_order()">选好了</button>
 				</view>
 			</view>
 			
@@ -93,6 +93,13 @@
 	} from "vue";
 	import SHOPPINGLIST from './components/shoppingList.vue';
 	import SHOPPINGDETAILS from './components/shoppingDetails.vue';
+	import { codeFn } from '../../utils/order.js';
+	// 在开始使用数据库 API 进行增删改查操作之前，需要先获取数据库的引用。
+	const db = wx.cloud.database();
+	// 要操作一个集合，需先获取它的引用。 orderData: 云数据库订单引用
+	const orderData_Api = db.collection('orderData');
+	// 数据库操作符
+	const _ = db.command;
 	export default {
 		components: {
 			SHOPPINGLIST,
@@ -323,6 +330,60 @@
 					index2,
 					item2,
 					cid
+				}
+			},
+			// 提交订单
+			async submit_order() {
+				// 过滤掉购物车里总价为0的商品
+				const orderList = this.cuisineCartList.filter(item => item.price != 0);
+				// 计算总价
+				let total_account = 0;
+				orderList.forEach(item => total_account += item.price);
+				console.log('orderList', orderList);
+				
+				// 订单数据
+				const orderData = {
+					table_number: '002', // 桌号
+					number_of_people: 3, // 人数
+					total_account, // 总金额
+					order_time: this.$Time().utcOffset(8).format('YYYY-MM-DD  HH:mm:ss'), // 下单时间
+					order_no: codeFn(), // 下单编号
+					order_status: 'no', // 订单状态 no:未接单, yes:已接单
+					order_settle_account: 'no', // 结账状态 no: 未结账, yes: 已结账
+					place_an_order: [ {shopping_list: orderList}] // 下单列表
+				}
+				console.log('orderData', orderData);
+				
+				try {
+					// 1.发起请求。 获取云数据库中的订单数据 
+					// 2.提交订单要考虑加菜。依据order_status订单状态 no:未接单, yes:已接单
+					// 3.当前桌号table_number
+					// 4.fieLd: 指定需要返回的字段
+					const query = await orderData_Api.where({table_number: '003', order_status: 'yes'}).field({_id: true, total_account: true}).get();
+					console.log('query', query);
+					if(query.data.length == 0) {
+						// 1.客户初次来店下单
+						// 2.之前吃过了, 已经结账了
+						// 3.把订单提交到数据库
+						await orderData_Api.add({data: orderData})
+					} else {
+						console.log('加菜');
+						// 1.同样的桌号
+						// 2.加菜
+						
+						// 计算出加菜后的总价格
+						const add_total_account = Number(query.data[0].total_account) + total_account;
+						// 更新数据库
+						await orderData_Api.doc(query.data[0]._id).update({
+							data: {
+								total_account: add_total_account,
+								order_status: 'no',
+								place_an_order: _.unshift({shopping_list: orderList})
+							}
+						})
+					}
+				} catch(err) {
+					console.log('提交订单出错');
 				}
 			}
 		},

@@ -1,6 +1,7 @@
 {
   "dependencies": {
     "holderjs": "^2.9.9",
+    "moment": "^2.29.4",
     "vue-holderjs": "^1.0.2",
     "wx-server-sdk": "^2.6.3"
   },
