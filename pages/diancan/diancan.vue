@@ -42,7 +42,7 @@
 										<view class="goods_recommend">
 											<view class="goods_name">
 												<text class="name">{{item2.name}}</text>
-												<text class="sales">已售{{item2.salesVolume}}</text>
+												<text class="sales">已售{{item2.sold_out}}</text>
 											</view>
 											<view class="goods_price">
 												<text class="sign">￥</text>
@@ -88,18 +88,28 @@
 </template>
 
 <script>
+	// 等渲染完毕后 才会执行
 	import {
 		nextTick
 	} from "vue";
+	// 商品列表组件
 	import SHOPPINGLIST from './components/shoppingList.vue';
+	// 商品详情组件
 	import SHOPPINGDETAILS from './components/shoppingDetails.vue';
+	// 随机订单号
 	import { codeFn } from '../../utils/order.js';
+	// 计算当天销售额
+	import {saleTimeClass} from '../../utils/saleTimeList.js';
+	
 	// 在开始使用数据库 API 进行增删改查操作之前，需要先获取数据库的引用。
 	const db = wx.cloud.database();
-	// 要操作一个集合，需先获取它的引用。 orderData: 云数据库订单引用
-	const orderData_Api = db.collection('orderData');
 	// 数据库操作符
 	const _ = db.command;
+	// 订单 云数据库 api
+	const orderData_Api = db.collection('orderData');
+	// 菜品，商品 云数据库 api
+	const cuisineList_Api = db.collection('cuisineList');
+	
 	export default {
 		components: {
 			SHOPPINGLIST,
@@ -339,7 +349,7 @@
 				// 计算总价
 				let total_account = 0;
 				orderList.forEach(item => total_account += item.price);
-				console.log('orderList', orderList);
+				// console.log('orderList', orderList);
 				
 				// 订单数据
 				const orderData = {
@@ -352,7 +362,7 @@
 					order_settle_account: 'no', // 结账状态 no: 未结账, yes: 已结账
 					place_an_order: [ {shopping_list: orderList}] // 下单列表
 				}
-				console.log('orderData', orderData);
+				// console.log('orderData', orderData);
 				
 				try {
 					// 1.发起请求。 获取云数据库中的订单数据 
@@ -360,8 +370,9 @@
 					// 3.当前桌号table_number
 					// 4.fieLd: 指定需要返回的字段
 					const query = await orderData_Api.where({table_number: '003', order_status: 'yes'}).field({_id: true, total_account: true}).get();
-					console.log('query', query);
+					// console.log('query', query);
 					if(query.data.length == 0) {
+						console.log('第一次来，已结账');
 						// 1.客户初次来店下单
 						// 2.之前吃过了, 已经结账了
 						// 3.把订单提交到数据库
@@ -382,8 +393,29 @@
 							}
 						})
 					}
+					
+					// 对商品已售量自增
+					orderList.forEach(async item => {
+						console.log('自增item', item);
+						// forEach 里面的await 外面的async 无效的 要在forEach里面放 async
+						const getCuisineListApi = await cuisineList_Api.doc(item._id).update({
+						  data: {
+							sold_out: _.inc(item.salesVolume)
+						  }
+						})
+					})
+					
+					// 计算当天的销售额
+					// 生成当天的时间，根据这个日期去查询云数据库是否有今天的数据，有数据就加这一次订单的价格
+					// 没有数据则：往数据库新增一天今天的数据 .add({data: {time, total_account}})
+					const time = this.$Time().utcOffset(8).format('YYYY-MM-DD');
+					await new saleTimeClass().saleTimeFn(time, total_account);
+					
+					// 清空订单数据
+					// 重新请求页面数据
+					
 				} catch(err) {
-					console.log('提交订单出错');
+					console.log('提交订单出错', err);
 				}
 			}
 		},

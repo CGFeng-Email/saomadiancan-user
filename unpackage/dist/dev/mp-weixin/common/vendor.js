@@ -28772,7 +28772,43 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
 /* 177 */,
 /* 178 */,
 /* 179 */,
-/* 180 */
+/* 180 */,
+/* 181 */,
+/* 182 */,
+/* 183 */,
+/* 184 */,
+/* 185 */,
+/* 186 */,
+/* 187 */,
+/* 188 */,
+/* 189 */,
+/* 190 */,
+/* 191 */,
+/* 192 */,
+/* 193 */,
+/* 194 */,
+/* 195 */,
+/* 196 */,
+/* 197 */,
+/* 198 */,
+/* 199 */,
+/* 200 */,
+/* 201 */,
+/* 202 */,
+/* 203 */,
+/* 204 */,
+/* 205 */,
+/* 206 */,
+/* 207 */,
+/* 208 */,
+/* 209 */,
+/* 210 */,
+/* 211 */,
+/* 212 */,
+/* 213 */,
+/* 214 */,
+/* 215 */,
+/* 216 */
 /*!************************************************************************************************!*\
   !*** ./node_modules/@dcloudio/vue-cli-plugin-uni/packages/@babel/runtime/regenerator/index.js ***!
   \************************************************************************************************/
@@ -28781,11 +28817,11 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
 
 // TODO(Babel 8): Remove this file.
 
-var runtime = __webpack_require__(/*! @babel/runtime/helpers/regeneratorRuntime */ 181)();
+var runtime = __webpack_require__(/*! @babel/runtime/helpers/regeneratorRuntime */ 217)();
 module.exports = runtime;
 
 /***/ }),
-/* 181 */
+/* 217 */
 /*!*******************************************************************!*\
   !*** ./node_modules/@babel/runtime/helpers/regeneratorRuntime.js ***!
   \*******************************************************************/
@@ -29106,7 +29142,7 @@ function _regeneratorRuntime() {
 module.exports = _regeneratorRuntime, module.exports.__esModule = true, module.exports["default"] = module.exports;
 
 /***/ }),
-/* 182 */
+/* 218 */
 /*!*****************************************************************!*\
   !*** ./node_modules/@babel/runtime/helpers/asyncToGenerator.js ***!
   \*****************************************************************/
@@ -29146,7 +29182,7 @@ function _asyncToGenerator(fn) {
 module.exports = _asyncToGenerator, module.exports.__esModule = true, module.exports["default"] = module.exports;
 
 /***/ }),
-/* 183 */
+/* 219 */
 /*!****************************************************************!*\
   !*** /Users/feng/Desktop/web/saomadiancan-user/utils/order.js ***!
   \****************************************************************/
@@ -29169,6 +29205,113 @@ function codeFn() {
   orderCode = new Date().getTime() + orderCode;
   return orderCode;
 }
+
+/***/ }),
+/* 220 */,
+/* 221 */,
+/* 222 */,
+/* 223 */,
+/* 224 */,
+/* 225 */
+/*!***********************************************************************!*\
+  !*** /Users/feng/Desktop/web/saomadiancan-user/utils/saleTimeList.js ***!
+  \***********************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(wx) {
+
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ 4);
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.saleTimeClass = void 0;
+var _regenerator = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/regenerator */ 216));
+var _asyncToGenerator2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/asyncToGenerator */ 218));
+var _classCallCheck2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/classCallCheck */ 23));
+var _createClass2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/createClass */ 24));
+// 在开始使用数据库 API 进行增删改查操作之前，需要先获取数据库的引用。
+var db = wx.cloud.database();
+// 营业额列表 云数据库 api
+var sale_time_list_api = db.collection('saleTimeList');
+
+// 计算当天销售额
+var saleTimeClass = /*#__PURE__*/function () {
+  function saleTimeClass() {
+    (0, _classCallCheck2.default)(this, saleTimeClass);
+  }
+  // 这里使用async  外部引入使用就得使用 await 调用
+  // time: 当天日期
+  // total_account: 价格
+  (0, _createClass2.default)(saleTimeClass, [{
+    key: "saleTimeFn",
+    value: function () {
+      var _saleTimeFn = (0, _asyncToGenerator2.default)( /*#__PURE__*/_regenerator.default.mark(function _callee(time, total_account) {
+        var query, num, num_tofixed;
+        return _regenerator.default.wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                _context.prev = 0;
+                _context.next = 3;
+                return sale_time_list_api.where({
+                  time: time
+                }).get();
+              case 3:
+                query = _context.sent;
+                console.log('query', query);
+                if (!(query.data.length == 0)) {
+                  _context.next = 10;
+                  break;
+                }
+                _context.next = 8;
+                return sale_time_list_api.add({
+                  data: {
+                    time: time,
+                    total_account: total_account
+                  }
+                });
+              case 8:
+                _context.next = 15;
+                break;
+              case 10:
+                // 查询到今天的营业额，时间不变，营业额total_account +=
+                // 处理成数字格式
+                num = Number(query.data[0].total_account) + total_account; // 处理价格的浮点数
+                num_tofixed = parseFloat(num.toPrecision(12));
+                console.log('浮点数', num_tofixed);
+                // 根据id 更新当天营业额的价格
+                _context.next = 15;
+                return sale_time_list_api.doc(query.data[0]._id).update({
+                  data: {
+                    total_account: num_tofixed
+                  }
+                });
+              case 15:
+                _context.next = 20;
+                break;
+              case 17:
+                _context.prev = 17;
+                _context.t0 = _context["catch"](0);
+                throw '计算当天的销售额错误';
+              case 20:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee, null, [[0, 17]]);
+      }));
+      function saleTimeFn(_x, _x2) {
+        return _saleTimeFn.apply(this, arguments);
+      }
+      return saleTimeFn;
+    }()
+  }]);
+  return saleTimeClass;
+}();
+exports.saleTimeClass = saleTimeClass;
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/wx.js */ 1)["default"]))
 
 /***/ })
 ]]);
