@@ -9,3 +9,4 @@ npm install
 
 4: window更新
 
+5: mac

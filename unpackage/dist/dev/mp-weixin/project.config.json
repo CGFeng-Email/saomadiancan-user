@@ -1,91 +1,32 @@
 {
   "description": "项目配置文件。",
   "packOptions": {
-<<<<<<< HEAD
     "ignore": [],
     "include": []
-=======
-    "ignore": []
->>>>>>> 9ca12b75c109c1f378e8f95480acb2fb60c6349b
   },
   "setting": {
     "urlCheck": false,
     "es6": false,
-<<<<<<< HEAD
-    "enhance": true,
     "postcss": false,
-    "preloadBackgroundData": false,
     "minified": false,
     "newFeature": true,
-    "coverView": true,
-    "nodeModules": false,
-    "autoAudits": false,
-    "showShadowRootInWxmlPanel": true,
-    "scopeDataCheck": false,
-    "uglifyFileName": false,
-    "checkInvalidKey": true,
-    "checkSiteMap": true,
-    "uploadWithSourceMap": true,
-    "compileHotReLoad": false,
-    "lazyloadPlaceholderEnable": false,
-    "useMultiFrameRuntime": true,
-    "useApiHook": true,
-    "useApiHostProcess": true,
+    "bigPackageSizeSupport": true,
     "babelSetting": {
       "ignore": [],
       "disablePlugins": [],
       "outputPath": ""
     },
-    "useIsolateContext": true,
-    "userConfirmedBundleSwitch": false,
-    "packNpmManually": false,
-    "packNpmRelationList": [],
-    "minifyWXSS": true,
-    "disableUseStrict": false,
-    "minifyWXML": true,
-    "showES6CompileOption": false,
-    "useCompilerPlugins": false,
-    "ignoreUploadUnusedFiles": true,
-    "condition": false
+    "condition": false,
+    "ignoreUploadUnusedFiles": true
   },
   "compileType": "miniprogram",
   "libVersion": "2.32.0",
   "appid": "wxb81dc480cbe6c823",
   "projectname": "diancan-user",
-  "cloudfunctionRoot": "cloudfunctions/",
   "condition": {},
+  "cloudfunctionRoot": "cloudfunctions/",
   "editorSetting": {
     "tabIndent": "insertSpaces",
     "tabSize": 2
   }
-=======
-    "postcss": false,
-    "minified": false,
-    "newFeature": true,
-    "bigPackageSizeSupport": true
-  },
-  "compileType": "miniprogram",
-  "libVersion": "",
-  "appid": "wxb81dc480cbe6c823",
-  "projectname": "diancan-user",
-  "condition": {
-    "search": {
-      "current": -1,
-      "list": []
-    },
-    "conversation": {
-      "current": -1,
-      "list": []
-    },
-    "game": {
-      "current": -1,
-      "list": []
-    },
-    "miniprogram": {
-      "current": -1,
-      "list": []
-    }
-  },
-  "cloudfunctionRoot": "cloudfunctions/"
->>>>>>> 9ca12b75c109c1f378e8f95480acb2fb60c6349b
 }
