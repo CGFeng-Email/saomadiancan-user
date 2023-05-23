@@ -28756,7 +28756,15 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
 /* 177 */,
 /* 178 */,
 /* 179 */,
-/* 180 */
+/* 180 */,
+/* 181 */,
+/* 182 */,
+/* 183 */,
+/* 184 */,
+/* 185 */,
+/* 186 */,
+/* 187 */,
+/* 188 */
 /*!************************************************************************************************!*\
   !*** ./node_modules/@dcloudio/vue-cli-plugin-uni/packages/@babel/runtime/regenerator/index.js ***!
   \************************************************************************************************/
@@ -28765,11 +28773,11 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
 
 // TODO(Babel 8): Remove this file.
 
-var runtime = __webpack_require__(/*! @babel/runtime/helpers/regeneratorRuntime */ 181)();
+var runtime = __webpack_require__(/*! @babel/runtime/helpers/regeneratorRuntime */ 189)();
 module.exports = runtime;
 
 /***/ }),
-/* 181 */
+/* 189 */
 /*!*******************************************************************!*\
   !*** ./node_modules/@babel/runtime/helpers/regeneratorRuntime.js ***!
   \*******************************************************************/
@@ -29090,7 +29098,7 @@ function _regeneratorRuntime() {
 module.exports = _regeneratorRuntime, module.exports.__esModule = true, module.exports["default"] = module.exports;
 
 /***/ }),
-/* 182 */
+/* 190 */
 /*!*****************************************************************!*\
   !*** ./node_modules/@babel/runtime/helpers/asyncToGenerator.js ***!
   \*****************************************************************/
@@ -29130,16 +29138,10 @@ function _asyncToGenerator(fn) {
 module.exports = _asyncToGenerator, module.exports.__esModule = true, module.exports["default"] = module.exports;
 
 /***/ }),
-/* 183 */
-<<<<<<< HEAD
-/*!****************************************************************!*\
-  !*** /Users/feng/Desktop/web/saomadiancan-user/utils/order.js ***!
-  \****************************************************************/
-=======
+/* 191 */
 /*!**************************************************!*\
   !*** G:/github/saomadiancan-user/utils/order.js ***!
   \**************************************************/
->>>>>>> 6474d5d51efdd49d9976713c311c56a2f2b2b9b5
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -29161,16 +29163,10 @@ function codeFn() {
 }
 
 /***/ }),
-/* 184 */
-<<<<<<< HEAD
-/*!***********************************************************************!*\
-  !*** /Users/feng/Desktop/web/saomadiancan-user/utils/saleTimeList.js ***!
-  \***********************************************************************/
-=======
+/* 192 */
 /*!*********************************************************!*\
   !*** G:/github/saomadiancan-user/utils/saleTimeList.js ***!
   \*********************************************************/
->>>>>>> 6474d5d51efdd49d9976713c311c56a2f2b2b9b5
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -29182,8 +29178,8 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.saleTimeClass = void 0;
-var _regenerator = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/regenerator */ 180));
-var _asyncToGenerator2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/asyncToGenerator */ 182));
+var _regenerator = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/regenerator */ 188));
+var _asyncToGenerator2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/asyncToGenerator */ 190));
 var _classCallCheck2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/classCallCheck */ 23));
 var _createClass2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/createClass */ 24));
 // 在开始使用数据库 API 进行增删改查操作之前，需要先获取数据库的引用。
