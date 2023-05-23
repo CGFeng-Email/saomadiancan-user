@@ -1,12 +1,17 @@
 {
   "description": "项目配置文件。",
   "packOptions": {
+<<<<<<< HEAD
     "ignore": [],
     "include": []
+=======
+    "ignore": []
+>>>>>>> 9ca12b75c109c1f378e8f95480acb2fb60c6349b
   },
   "setting": {
     "urlCheck": false,
     "es6": false,
+<<<<<<< HEAD
     "enhance": true,
     "postcss": false,
     "preloadBackgroundData": false,
@@ -53,4 +58,34 @@
     "tabIndent": "insertSpaces",
     "tabSize": 2
   }
+=======
+    "postcss": false,
+    "minified": false,
+    "newFeature": true,
+    "bigPackageSizeSupport": true
+  },
+  "compileType": "miniprogram",
+  "libVersion": "",
+  "appid": "wxb81dc480cbe6c823",
+  "projectname": "diancan-user",
+  "condition": {
+    "search": {
+      "current": -1,
+      "list": []
+    },
+    "conversation": {
+      "current": -1,
+      "list": []
+    },
+    "game": {
+      "current": -1,
+      "list": []
+    },
+    "miniprogram": {
+      "current": -1,
+      "list": []
+    }
+  },
+  "cloudfunctionRoot": "cloudfunctions/"
+>>>>>>> 9ca12b75c109c1f378e8f95480acb2fb60c6349b
 }

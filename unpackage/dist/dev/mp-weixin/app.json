@@ -1,24 +1,9 @@
 {
-<<<<<<< HEAD
-  "pages": [
-    "pages/order_details/order_details",
-    "pages/diancan/diancan",
-    "pages/index/index",
-    "pages/my_order/my_order"
-  ],
-  "subPackages": [],
-  "window": {
-    "navigationBarTextStyle": "black",
-    "navigationBarTitleText": "uni-app",
-    "navigationBarBackgroundColor": "#F8F8F8",
-    "backgroundColor": "#F8F8F8"
-  },
-  "usingComponents": {}
-=======
     "pages": [
-        "pages/diancan/diancan",
         "pages/order_details/order_details",
-        "pages/index/index"
+        "pages/diancan/diancan",
+        "pages/index/index",
+        "pages/my_order/my_order"
     ],
     "subPackages": [],
     "window": {
@@ -29,5 +14,4 @@
     },
     "usingComponents": {},
     "sitemapLocation": "sitemap.json"
->>>>>>> 6474d5d51efdd49d9976713c311c56a2f2b2b9b5
 }
