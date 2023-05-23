@@ -364,6 +364,9 @@
 				}
 				// console.log('orderData', orderData);
 				
+				// 提交订单时，给客户发起订单订阅消息。让客户开启订阅通知功能 不然无法接收到订阅通知
+				await this.subscribeMessage();
+				
 				try {
 					// 1.发起请求。 获取云数据库中的订单数据 
 					// 2.提交订单要考虑加菜。依据order_status订单状态 no:未接单, yes:已接单
@@ -371,6 +374,7 @@
 					// 4.fieLd: 指定需要返回的字段
 					const query = await orderData_Api.where({table_number: '003', order_status: 'yes'}).field({_id: true, total_account: true}).get();
 					// console.log('query', query);
+					
 					if(query.data.length == 0) {
 						console.log('第一次来，已结账');
 						// 1.客户初次来店下单
@@ -417,6 +421,17 @@
 				} catch(err) {
 					console.log('提交订单出错', err);
 				}
+			},
+			// 提交订单时，给客户发起订单订阅消息
+			subscribeMessage() {
+				return new Promise((resolve, reject) => {
+					wx.requestSubscribeMessage({
+					  tmplIds: ['uDf_R5R4uQ8jsyEhPojMIdOE3FwRq7IIWXNj0sb1m5I'],
+					  success: res => {
+						resolve(res)
+					  }
+					})
+				})
 			}
 		},
 		created() {
