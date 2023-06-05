@@ -3,5 +3,18 @@
   "projectname": "diancan-user",
   "setting": {
     "compileHotReLoad": true
+  },
+  "condition": {
+    "miniprogram": {
+      "list": [
+        {
+          "name": "订单详情",
+          "pathName": "pages/order_details/order_details",
+          "query": "table_number=005",
+          "launchMode": "default",
+          "scene": null
+        }
+      ]
+    }
   }
 }

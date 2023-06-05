@@ -344,8 +344,10 @@
 			},
 			// 提交订单
 			async submit_order() {
+				
 				// 过滤掉购物车里总价为0的商品
 				const orderList = this.cuisineCartList.filter(item => item.price != 0);
+				
 				// 计算总价
 				let total_account = 0;
 				orderList.forEach(item => total_account += item.price);
@@ -353,7 +355,7 @@
 				
 				// 订单数据
 				const orderData = {
-					table_number: '002', // 桌号
+					table_number: '005', // 桌号
 					number_of_people: 3, // 人数
 					total_account, // 总金额
 					order_time: this.$Time().utcOffset(8).format('YYYY-MM-DD  HH:mm:ss'), // 下单时间
@@ -367,12 +369,17 @@
 				// 提交订单时，给客户发起订单订阅消息。让客户开启订阅通知功能 不然无法接收到订阅通知
 				await this.subscribeMessage();
 				
+				// 显示下单加载图标
+				wx.showLoading({
+				  title: '正在下单',
+				})
+				
 				try {
 					// 1.发起请求。 获取云数据库中的订单数据 
 					// 2.提交订单要考虑加菜。依据order_status订单状态 no:未接单, yes:已接单
 					// 3.当前桌号table_number
 					// 4.fieLd: 指定需要返回的字段
-					const query = await orderData_Api.where({table_number: '003', order_status: 'yes'}).field({_id: true, total_account: true}).get();
+					const query = await orderData_Api.where({table_number: `${orderData.table_number}`, order_status: 'yes'}).field({_id: true, total_account: true}).get();
 					// console.log('query', query);
 					
 					if(query.data.length == 0) {
@@ -416,14 +423,25 @@
 					await new saleTimeClass().saleTimeFn(time, total_account);
 					
 					// 清空订单数据
-					// 重新请求页面数据
+					// 跳转到订单详情页
+					wx.redirectTo({
+					  url: `/pages/order_details/order_details?table_number=${orderData.table_number}`,
+					  complete: () => {
+						// 关闭加载弹窗
+						wx.hideLoading()
+					  }
+					})
 					
 				} catch(err) {
-					console.log('提交订单出错', err);
+					wx.showToast({
+					  title: '发生错误',
+					  icon: 'error'
+					})
 				}
 			},
 			// 提交订单时，给客户发起订单订阅消息
 			subscribeMessage() {
+				// tmplIds: 要跟后台的id相匹配
 				return new Promise((resolve, reject) => {
 					wx.requestSubscribeMessage({
 					  tmplIds: ['uDf_R5R4uQ8jsyEhPojMIdOE3FwRq7IIWXNj0sb1m5I'],

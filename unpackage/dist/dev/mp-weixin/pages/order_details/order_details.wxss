@@ -1,3 +1,6 @@
+.order_details.data-v-8cff30ac {
+  padding-bottom: 130rpx;
+}
 .order_details .bg.data-v-8cff30ac {
   position: fixed;
   top: 0;
@@ -136,12 +139,20 @@
   line-height: 34rpx;
   margin-bottom: 20rpx;
 }
-.order_details .bottom_order .btn.data-v-8cff30ac {
+.order_details .bottom_add_btn.data-v-8cff30ac {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 120rpx;
   display: flex;
   justify-content: flex-end;
-  padding: 30rpx 0;
+  align-items: center;
+  background: #fff;
+  padding: 0 30rpx;
+  box-shadow: 0 -2rpx 3rpx 3rpx #f9f9f9;
 }
-.order_details .bottom_order .btn .add_order.data-v-8cff30ac {
+.order_details .bottom_add_btn .add_order.data-v-8cff30ac {
   width: 220rpx;
   height: 80rpx;
   background: #fcd267;

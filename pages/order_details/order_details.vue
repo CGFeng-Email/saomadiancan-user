@@ -46,7 +46,7 @@
 					</view>
 				</scroll-view>
 				<view class="more">
-					<text class="text" @click="order_more">{{orderMore ? '收起菜单' : '展开全部'}}</text>
+					<text class="text">{{orderMore ? '收起菜单' : '展开全部'}}</text>
 					<i :class="['iconfont', orderMore ? 'icon-xiangshang' : 'icon-xiala']"></i>
 				</view>
 				<view class="total_account">
@@ -66,48 +66,42 @@
 				<view class="lis table_number">
 					桌号名称：002
 				</view>
-				
-				<view class="btn">
-					<view class="add_order">
-						加菜
-					</view>
-				</view>
 			</view>
 		</view>
+		
+		<div class="bottom_add_btn">
+			<view class="add_order">
+				加菜
+			</view>
+		</div>
 	</view>
 </template>
 
 <script>
+	// 云数据库 db
+	const db = wx.cloud.database();
+	// 订单 api
+	const orderDataApi = db.collection('orderData');
+	
 	export default {
 		data() {
 			return {
 				orderMore: false,
-				scrollTop: 0,
-				orderListHeight: 0
 			}
 		},
 		mounted() {
 			
 		},
+		onLoad(params) {
+			console.log('params', params);
+			this.getOrderData(params.table_number)
+		},
 		methods: {
-			order_more() {
-				this.orderMore = !this.orderMore;
-				if(!this.orderMore) {
-					this.scrollTop = 0
-				} else {
-					this.queryOrderListHeight()
-					setTimeout(() => {
-						
-					}, 500)
-				}
-			},
-			queryOrderListHeight() {
-				const query = uni.createSelectorQuery().in(this);
-				query.select('.order_list_content').boundingClientRect(data => {
-					console.log('data', data);
-					
-				}).exec();
-				
+			// 不能根据openid去获取订单 因为是提交生成的订单 直接跳转到该页面 无法携带id 可以携带桌号进行获取
+			async getOrderData(table_number) {
+				// 获取当前的订单
+				const res = await orderDataApi.where({table_number: `${table_number}`, order_status: 'yes'}).get();
+				console.log('res', res);
 			}
 		}
 	}
@@ -115,6 +109,7 @@
 
 <style lang="less" scoped>
 	.order_details {
+		padding-bottom: 130rpx;
 		.bg {
 			position: fixed;
 			top: 0;
@@ -257,19 +252,30 @@
 				line-height: 34rpx;
 				margin-bottom: 20rpx;
 			}
-			.btn {
-				display: flex;
-				justify-content: flex-end;
-				padding: 30rpx 0;
-				.add_order {
-					width: 220rpx;
-					height: 80rpx;
-					background: #fcd267;
-					text-align: center;
-					line-height: 80rpx;
-					font-size: 36rpx;
-					border-radius: 46rpx;
-				}
+			
+		}
+		
+		.bottom_add_btn {
+			position: fixed;
+			bottom: 0;
+			left: 0;
+			right: 0;
+			height: 120rpx;
+			display: flex;
+			justify-content: flex-end;
+			align-items: center;
+			background: #fff;
+			padding: 0 30rpx;
+			box-shadow: 0 -2rpx 3rpx 3rpx #f9f9f9;
+			
+			.add_order {
+				width: 220rpx;
+				height: 80rpx;
+				background: #fcd267;
+				text-align: center;
+				line-height: 80rpx;
+				font-size: 36rpx;
+				border-radius: 46rpx;
 			}
 		}
 	}

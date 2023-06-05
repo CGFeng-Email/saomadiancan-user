@@ -135,12 +135,15 @@ __webpack_require__.r(__webpack_exports__);
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-/* WEBPACK VAR INJECTION */(function(uni) {
+/* WEBPACK VAR INJECTION */(function(wx) {
 
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ 4);
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.default = void 0;
+var _regenerator = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/regenerator */ 188));
+var _asyncToGenerator2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/asyncToGenerator */ 190));
 //
 //
 //
@@ -220,35 +223,51 @@ exports.default = void 0;
 //
 //
 //
+
+// 云数据库 db
+var db = wx.cloud.database();
+// 订单 api
+var orderDataApi = db.collection('orderData');
 var _default = {
   data: function data() {
     return {
-      orderMore: false,
-      scrollTop: 0,
-      orderListHeight: 0
+      orderMore: false
     };
   },
   mounted: function mounted() {},
+  onLoad: function onLoad(params) {
+    console.log('params', params);
+    this.getOrderData(params.table_number);
+  },
   methods: {
-    order_more: function order_more() {
-      this.orderMore = !this.orderMore;
-      if (!this.orderMore) {
-        this.scrollTop = 0;
-      } else {
-        this.queryOrderListHeight();
-        setTimeout(function () {}, 500);
-      }
-    },
-    queryOrderListHeight: function queryOrderListHeight() {
-      var query = uni.createSelectorQuery().in(this);
-      query.select('.order_list_content').boundingClientRect(function (data) {
-        console.log('data', data);
-      }).exec();
+    // 不能根据openid去获取订单 因为是提交生成的订单 直接跳转到该页面 无法携带id 可以携带桌号进行获取
+    getOrderData: function getOrderData(table_number) {
+      return (0, _asyncToGenerator2.default)( /*#__PURE__*/_regenerator.default.mark(function _callee() {
+        var res;
+        return _regenerator.default.wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                _context.next = 2;
+                return orderDataApi.where({
+                  table_number: "".concat(table_number),
+                  order_status: 'yes'
+                }).get();
+              case 2:
+                res = _context.sent;
+                console.log('res', res);
+              case 4:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee);
+      }))();
     }
   }
 };
 exports.default = _default;
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 2)["default"]))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/wx.js */ 1)["default"]))
 
 /***/ }),
 

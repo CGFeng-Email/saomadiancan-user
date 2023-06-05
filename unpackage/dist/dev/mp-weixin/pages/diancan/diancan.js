@@ -555,7 +555,7 @@ var _default = {
 
                 // 订单数据
                 orderData = {
-                  table_number: '002',
+                  table_number: '005',
                   // 桌号
                   number_of_people: 3,
                   // 人数
@@ -577,40 +577,44 @@ var _default = {
                 _context3.next = 6;
                 return _this4.subscribeMessage();
               case 6:
-                _context3.prev = 6;
-                _context3.next = 9;
+                // 显示下单加载图标
+                wx.showLoading({
+                  title: '正在下单'
+                });
+                _context3.prev = 7;
+                _context3.next = 10;
                 return orderData_Api.where({
-                  table_number: '003',
+                  table_number: "".concat(orderData.table_number),
                   order_status: 'yes'
                 }).field({
                   _id: true,
                   total_account: true
                 }).get();
-              case 9:
+              case 10:
                 query = _context3.sent;
                 if (!(query.data.length == 0)) {
-                  _context3.next = 16;
+                  _context3.next = 17;
                   break;
                 }
                 console.log('第一次来，已结账');
                 // 1.客户初次来店下单
                 // 2.之前吃过了, 已经结账了
                 // 3.把订单提交到数据库
-                _context3.next = 14;
+                _context3.next = 15;
                 return orderData_Api.add({
                   data: orderData
                 });
-              case 14:
-                _context3.next = 20;
+              case 15:
+                _context3.next = 21;
                 break;
-              case 16:
+              case 17:
                 console.log('加菜');
                 // 1.同样的桌号
                 // 2.加菜
 
                 // 计算出加菜后的总价格
                 add_total_account = Number(query.data[0].total_account) + total_account; // 更新数据库
-                _context3.next = 20;
+                _context3.next = 21;
                 return orderData_Api.doc(query.data[0]._id).update({
                   data: {
                     total_account: add_total_account,
@@ -620,7 +624,7 @@ var _default = {
                     })
                   }
                 });
-              case 20:
+              case 21:
                 // 对商品已售量自增
                 orderList.forEach( /*#__PURE__*/function () {
                   var _ref = (0, _asyncToGenerator2.default)( /*#__PURE__*/_regenerator.default.mark(function _callee2(item) {
@@ -655,25 +659,38 @@ var _default = {
                 // 生成当天的时间，根据这个日期去查询云数据库是否有今天的数据，有数据就加这一次订单的价格
                 // 没有数据则：往数据库新增一天今天的数据 .add({data: {time, total_account}})
                 time = _this4.$Time().utcOffset(8).format('YYYY-MM-DD');
-                _context3.next = 24;
+                _context3.next = 25;
                 return new _saleTimeList.saleTimeClass().saleTimeFn(time, total_account);
-              case 24:
-                _context3.next = 29;
+              case 25:
+                // 清空订单数据
+                // 跳转到订单详情页
+                wx.redirectTo({
+                  url: "/pages/order_details/order_details?table_number=".concat(orderData.table_number),
+                  complete: function complete() {
+                    // 关闭加载弹窗
+                    wx.hideLoading();
+                  }
+                });
+                _context3.next = 31;
                 break;
-              case 26:
-                _context3.prev = 26;
-                _context3.t0 = _context3["catch"](6);
-                console.log('提交订单出错', _context3.t0);
-              case 29:
+              case 28:
+                _context3.prev = 28;
+                _context3.t0 = _context3["catch"](7);
+                wx.showToast({
+                  title: '发生错误',
+                  icon: 'error'
+                });
+              case 31:
               case "end":
                 return _context3.stop();
             }
           }
-        }, _callee3, null, [[6, 26]]);
+        }, _callee3, null, [[7, 28]]);
       }))();
     },
     // 提交订单时，给客户发起订单订阅消息
     subscribeMessage: function subscribeMessage() {
+      // tmplIds: 要跟后台的id相匹配
       return new Promise(function (resolve, reject) {
         wx.requestSubscribeMessage({
           tmplIds: ['uDf_R5R4uQ8jsyEhPojMIdOE3FwRq7IIWXNj0sb1m5I'],
