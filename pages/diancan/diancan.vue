@@ -366,7 +366,7 @@
 				}
 				// console.log('orderData', orderData);
 				
-				// 提交订单时，给客户发起订单订阅消息。让客户开启订阅通知功能 不然无法接收到订阅通知
+				// 提交订单时，给客户发起订单订阅消息。让客户开启订阅通知功能 不然无法接收到订阅通知 这个要开启node后台
 				await this.subscribeMessage();
 				
 				// 显示下单加载图标
@@ -380,7 +380,7 @@
 					// 3.当前桌号table_number
 					// 4.fieLd: 指定需要返回的字段
 					const query = await orderData_Api.where({table_number: `${orderData.table_number}`, order_status: 'yes'}).field({_id: true, total_account: true}).get();
-					// console.log('query', query);
+					console.log('query', query);
 					
 					if(query.data.length == 0) {
 						console.log('第一次来，已结账');
@@ -395,11 +395,13 @@
 						
 						// 计算出加菜后的总价格
 						const add_total_account = Number(query.data[0].total_account) + total_account;
+						
 						// 更新数据库
+						// 每次加菜都会把接单状态初始化为未接单
 						await orderData_Api.doc(query.data[0]._id).update({
 							data: {
 								total_account: add_total_account,
-								order_status: 'no',
+								order_status: orderData.order_status,
 								place_an_order: _.unshift({shopping_list: orderList})
 							}
 						})
@@ -422,8 +424,7 @@
 					const time = this.$Time().utcOffset(8).format('YYYY-MM-DD');
 					await new saleTimeClass().saleTimeFn(time, total_account);
 					
-					// 清空订单数据
-					// 跳转到订单详情页
+					// 关闭当前页 跳转到订单详情页
 					wx.redirectTo({
 					  url: `/pages/order_details/order_details?table_number=${orderData.table_number}`,
 					  complete: () => {

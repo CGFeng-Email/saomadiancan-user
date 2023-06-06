@@ -38,15 +38,6 @@
   border-radius: 10rpx;
   box-shadow: 0 0 14rpx 10rpx rgba(0, 0, 0, 0.1);
 }
-.order_details .order_list .order_content .order_list_content.data-v-8cff30ac {
-  height: 520rpx;
-  overflow-y: hidden;
-  transition: all 0.4s ease;
-}
-.order_details .order_list .order_content .order_list_up.data-v-8cff30ac {
-  height: auto;
-  overflow-y: auto;
-}
 .order_details .order_list .order_content .item.data-v-8cff30ac {
   margin-bottom: 20rpx;
 }
@@ -64,6 +55,8 @@
 }
 .order_details .order_list .order_content .item .list .l_item.data-v-8cff30ac {
   margin-bottom: 20rpx;
+}
+.order_details .order_list .order_content .item .list .l_item .l_item_wrap.data-v-8cff30ac {
   display: flex;
   height: 120rpx;
 }
@@ -98,7 +91,7 @@
   font-size: 28rpx;
   color: #999;
 }
-.order_details .order_list .more.data-v-8cff30ac {
+.order_details .order_list .order_content .item .more.data-v-8cff30ac {
   text-align: center;
   font-size: 28rpx;
   color: #999;
@@ -106,10 +99,10 @@
   justify-content: center;
   align-items: center;
 }
-.order_details .order_list .more .text.data-v-8cff30ac {
+.order_details .order_list .order_content .item .more .text.data-v-8cff30ac {
   padding: 40rpx 0;
 }
-.order_details .order_list .more .iconfont.data-v-8cff30ac {
+.order_details .order_list .order_content .item .more .iconfont.data-v-8cff30ac {
   padding-left: 4rpx;
 }
 .order_details .order_list .total_account.data-v-8cff30ac {

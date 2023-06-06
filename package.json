@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "e-commerce_price": "^1.0.3",
     "holderjs": "^2.9.9",
     "moment": "^2.29.4",
     "vue-holderjs": "^1.0.2",
