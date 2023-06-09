@@ -245,12 +245,12 @@ var _saleTimeList = __webpack_require__(/*! ../../utils/saleTimeList.js */ 184);
 // 等渲染完毕后 才会执行
 var SHOPPINGLIST = function SHOPPINGLIST() {
   __webpack_require__.e(/*! require.ensure | pages/diancan/components/shoppingList */ "pages/diancan/components/shoppingList").then((function () {
-    return resolve(__webpack_require__(/*! ./components/shoppingList.vue */ 210));
+    return resolve(__webpack_require__(/*! ./components/shoppingList.vue */ 214));
   }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
 };
 var SHOPPINGDETAILS = function SHOPPINGDETAILS() {
   __webpack_require__.e(/*! require.ensure | pages/diancan/components/shoppingDetails */ "pages/diancan/components/shoppingDetails").then((function () {
-    return resolve(__webpack_require__(/*! ./components/shoppingDetails.vue */ 217));
+    return resolve(__webpack_require__(/*! ./components/shoppingDetails.vue */ 221));
   }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
 };
 // 在开始使用数据库 API 进行增删改查操作之前，需要先获取数据库的引用。
