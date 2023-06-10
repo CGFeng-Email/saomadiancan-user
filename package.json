@@ -1,5 +1,7 @@
 {
   "dependencies": {
+    "cos-nodejs-sdk-v5": "^2.12.1",
+    "cos-wx-sdk-v5": "^1.4.10",
     "e-commerce_price": "^1.0.3",
     "holderjs": "^2.9.9",
     "moment": "^2.29.4",

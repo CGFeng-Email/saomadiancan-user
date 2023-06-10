@@ -1,15 +1,15 @@
 
 page {
 	height: 100vh;
-	background: url('https://diancan-1317202885.cos.ap-guangzhou.myqcloud.com/diancan/img/1761686298673_.pic.jpg?q-sign-algorithm=sha1&q-ak=AKID7GMm7bhhZryEklfxQd7RfbJKYPs-uUo716FjRt6KxCbdQLQ8-rQf8ELVjDz-kpiA&q-sign-time=1686303198;1686306798&q-key-time=1686303198;1686306798&q-header-list=host&q-url-param-list=ci-process&q-signature=5a7fc23652a98d4571f60cede381a72bb385cda9&x-cos-security-token=bEU4k7Ct6DePOk80iLSwpcWuclNEt19a97dbe84138de06bc8991e2b7f6e1aedcbI4zrQyintjksV1Z9Ges7v8DymvSFXnYLPDELsLNqv5KlEBbvfHxRYe76q6RKfYvXRplZzEvRZDXQvBhDytIvx1PwiusPkQGZyxW2MYCF-feybmRAQEdg_3M1CdTAR7aVHrUqvlHwPhv4AwxWvwjgbHIrBKTisjCuzqMqppykdkgBJA8ZQE_cJVPBrcIl_dV&ci-process=originImage') no-repeat;
+	background: url('https://diancan-1317202885.cos.ap-guangzhou.myqcloud.com/diancan/img/1761686298673_.pic.jpg') no-repeat;
 	background-size: cover;
 }
 
-.head.data-v-55de4b74 {
-  margin-top: 150rpx;
+.top_content.data-v-55de4b74 {
+  margin-top: 200rpx;
   text-align: center;
 }
-.head .text.data-v-55de4b74 {
+.top_content .text.data-v-55de4b74 {
   font-size: 56rpx;
   line-height: 86rpx;
   letter-spacing: 3rpx;
@@ -27,6 +27,10 @@ page {
   background: #fff;
   padding: 20rpx 20rpx 30rpx;
   border-radius: 14rpx;
+}
+.content .img.data-v-55de4b74 {
+  width: 300rpx;
+  height: 300rpx;
 }
 .content .name.data-v-55de4b74 {
   font-weight: 500;
@@ -60,6 +64,7 @@ page {
   background: #f4cf73;
   line-height: 80rpx;
   opacity: 0.5;
+  text-align: center;
 }
 .content .btn_active.data-v-55de4b74 {
   opacity: 1;

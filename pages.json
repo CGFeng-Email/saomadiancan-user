@@ -1,7 +1,10 @@
 {
 	"pages": [ 
 		{
-			"path": "pages/select/select"
+			"path": "pages/select/select",
+			"style": {
+				"navigationStyle": "custom"
+			}
 		},
 		{
 			"path": "pages/index/index",
