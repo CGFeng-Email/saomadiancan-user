@@ -1,17 +1,18 @@
 <template>
 	<view class="container">
 
-		<!-- <view class="top_content">
-			<view class="text">欢迎来到</view>
-			<view class="text">全易餐饮店</view>
-		<view>
-			 -->
+		
+		<view class="top">
+			<view class="title">欢迎来到</view>
+			<view class="title">全易餐饮店</view>
+		</view>
+		
+			
 		<view class="content">
-			<image class="img" :src="base64ImgUrl"></image>
 
 			<view class="name">您好，请选择就餐人数</view>
 
-			<view class="table_number">桌号：002</view>
+			<view class="table_number">桌号：{{table_number}}</view>
 
 			<view class="list">
 				<view class="item" :class="[number_of_prople == item ? 'item_active' : '']"
@@ -29,20 +30,6 @@
 </template>
 
 <script>
-	// 引入腾讯云插件
-	// var COS = require('cos-nodejs-sdk-v5');
-	import COS from 'cos-wx-sdk-v5'
-
-	var cos = new COS({
-		SecretId: 'AKIDkNrEaomqiS1Vq58yiLn1LVTDl8Pex7ED',
-		SecretKey: 'sa6ORHtHSQF792iBRhkpnY6WoxxnT2Sl',
-		SimpleUploadMethod: 'putObject',
-	});
-
-
-	let Bucket = 'diancan-1317202885'; // 存储桶名称
-	let Region = 'ap-guangzhou'; // 存储桶所在地区ip
-
 	const db = wx.cloud.database()
 	const tableNumberListApi = db.collection('tableNumberList')
 
@@ -52,111 +39,18 @@
 				list: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
 				table_number: '', // 桌号
 				number_of_prople: -1, // 就餐人数
-				base64ImgUrl: '',
-
 			}
 		},
-		onLoad() {
-			let number = '001';
-			this.getCode(number)
+		onLoad(e) {
+			console.log('e', e);
+			this.table_number = e.number
+			wx.setStorageSync('table_number', e.number);
 		},
 		methods: {
-			async getCode(number) {
-				const token = await this.getToken();
-				console.log('token', token);
-
-				uni.request({
-					url: `https://api.weixin.qq.com/wxa/getwxacode?access_token=${token}`,
-					methods: 'POST',
-					responseType: 'arraybuffer',
-					data: JSON.stringify({
-						"path": 'pages/select/select?number=' + number,
-						"env_version": "trial",
-						"width": 280
-					}),
-					success: async res => {
-						console.log('res', res);
-						console.log('res', JSON.stringify(res));
-
-						// const arrayBuffer = new Uint8Array(res.data)
-						// const base64 = wx.arrayBufferToBase64(arrayBuffer)
-						// console.log('base64', base64);
-						// this.base64ImgUrl = base64
-
-						const name = await this.randomName(number)
-						console.log('name', name);
-
-						const getBufferImgStorage = await this.bufferImgStorage(name, res.data);
-						console.log('getBufferImgStorage', getBufferImgStorage);
-
-						// cos.putObject({
-						// 	Bucket,
-						// 	Region,
-						// 	Key: 'diancan/code/' + name,
-						// 	Body: res.data, // Body里传入的是文件内容
-						// }, function(err, data) {
-						// 	console.log(err || data);
-						// });
-					},
-					fail: err => {
-						console.log('err', err);
-					}
-				})
-			},
-			// 二进制文件转化成图片 存储到本地
-			bufferImgStorage(name, data) {
-				console.log('999', data);
-				var save = wx.getFileSystemManager();
-				save.writeFile({
-					filePath: wx.env.USER_DATA_PATH + name,
-					data,
-					success: res => {
-						console.log('res', res);
-						//保存到相册
-						// wx.saveImageToPhotosAlbum({ 
-						// 	filePath: wx.env.USER_DATA_PATH + name,
-						// 	success: function(res) {
-						// 		wx.showToast({
-						// 			title: '下载成功',
-						// 			icon: 'none',
-						// 			duration: 2000, //提示的延迟时间，单位毫秒，默认：1500
-						// 		})
-						// 	},
-						// 	fail: function(err) {
-						// 		console.log(err)
-						// 	}
-						// })
-					},
-					fail: err => {
-						console.log('err', err)
-					}
-				})
-			},
-			// 随机命名
-			randomName(number) {
-				return new Date().getTime() + '-' + number + '.jpg'
-			},
-			// 获取token
-			getToken() {
-				const params = {
-					grant_type: 'client_credential',
-					appid: 'wxb81dc480cbe6c823',
-					secret: '77c3578acf2f5b75a359fdb5085ae007'
-				}
-				return new Promise((resolve, reject) => {
-					uni.request({
-						url: `https://api.weixin.qq.com/cgi-bin/token?grant_type=${params.grant_type}&appid=${params.appid}&secret=${params.secret}`,
-						success: function(res) {
-							console.log(res);
-							resolve(res.data.access_token)
-						}
-					})
-				})
-			},
 			itemClick(item) {
 				console.log(item);
-				wx.setStorageSync('number_of_prople', this.number_of_prople)
 				this.number_of_prople = item
+				wx.setStorageSync('number_of_prople', item)
 			},
 			btn() {
 				if (this.number_of_prople <= 0) return false;
@@ -178,11 +72,11 @@
 </style>
 
 <style lang="less" scoped>
-	.top_content {
+	.top {
 		margin-top: 200rpx;
 		text-align: center;
 
-		.text {
+		.title {
 			font-size: 56rpx;
 			line-height: 86rpx;
 			letter-spacing: 3rpx;

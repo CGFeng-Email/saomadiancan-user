@@ -5,11 +5,11 @@ page {
 	background-size: cover;
 }
 
-.top_content.data-v-55de4b74 {
+.top.data-v-55de4b74 {
   margin-top: 200rpx;
   text-align: center;
 }
-.top_content .text.data-v-55de4b74 {
+.top .title.data-v-55de4b74 {
   font-size: 56rpx;
   line-height: 86rpx;
   letter-spacing: 3rpx;
