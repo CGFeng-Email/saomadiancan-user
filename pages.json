@@ -1,15 +1,16 @@
 {
 	"pages": [ 
 		{
-			"path": "pages/select/select",
+			"path": "pages/index/index",
 			"style": {
-				"navigationStyle": "custom"
+				"navigationBarTitleText": "扫码",
+				"navigationBarBackgroundColor": "#fff"
 			}
 		},
 		{
-			"path": "pages/index/index",
+			"path": "pages/select/select",
 			"style": {
-				"navigationBarTitleText": "扫码"
+				"navigationStyle": "custom"
 			}
 		},
 		{

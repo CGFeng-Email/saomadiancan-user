@@ -3,10 +3,16 @@ page {
 	height: 100vh;
 	background: url('https://diancan-1317202885.cos.ap-guangzhou.myqcloud.com/diancan/img/1761686298673_.pic.jpg') no-repeat;
 	background-size: cover;
+	background-position: center center;
+	background-attachment: fixed;
 }
 
 .top.data-v-55de4b74 {
-  margin-top: 200rpx;
+  position: fixed;
+  top: 200rpx;
+  left: 50%;
+  -webkit-transform: translateX(-50%);
+          transform: translateX(-50%);
   text-align: center;
 }
 .top .title.data-v-55de4b74 {

@@ -120,10 +120,12 @@
 					}).get();
 					console.log('res', res);
 					const data = res.data[0];
+					
 					// 总份数
 					data.place_an_order.forEach(item => {
 						return this.total_number += item.shopping_list.length
 					})
+					
 					// 价格总计，订单编号，下单时间，桌号
 					this.order_data = {
 						order_no: data.order_no,
@@ -152,7 +154,9 @@
 			// 展开
 			itemMore(index) {
 				console.log(index);
+				// 辅值
 				this.$set(this.sliceList[index], 'list', this.totalList[index].shopping_list)
+				// 判断是否展开
 				this.$set(this.sliceList[index], 'max', 0)
 			},
 			// 加菜

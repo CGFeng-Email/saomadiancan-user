@@ -1,12 +1,10 @@
 <template>
 	<view class="container">
 
-		
 		<view class="top">
 			<view class="title">欢迎来到</view>
 			<view class="title">全易餐饮店</view>
 		</view>
-		
 			
 		<view class="content">
 
@@ -25,14 +23,12 @@
 				开始点餐
 			</view>
 		</view>
-
 	</view>
 </template>
 
 <script>
 	const db = wx.cloud.database()
-	const tableNumberListApi = db.collection('tableNumberList')
-
+	const orderDataApi = db.collection('orderData');
 	export default {
 		data() {
 			return {
@@ -45,18 +41,30 @@
 			console.log('e', e);
 			this.table_number = e.number
 			wx.setStorageSync('table_number', e.number);
+			this.verify()
 		},
 		methods: {
+			// 就餐人数
 			itemClick(item) {
 				console.log(item);
 				this.number_of_prople = item
-				wx.setStorageSync('number_of_prople', item)
 			},
 			btn() {
+				// 跳转点餐页
 				if (this.number_of_prople <= 0) return false;
 				console.log('提交');
 				wx.redirectTo({
 					url: '/pages/diancan/diancan'
+				})
+			},
+			// 验证当前桌号是否已结账
+			async verify() {
+				const res = await orderDataApi.where({order_status: 'yes', table_number: this.table_number}).get();
+				console.log('res', res);
+				if(res.data.length <= 0) return false;
+				wx.setStorageSync('number_of_prople', this.number_of_prople)
+				wx.reLaunch({
+				  url: '/pages/diancan/diancan'
 				})
 			}
 		}
@@ -68,12 +76,17 @@
 		height: 100vh;
 		background: url('https://diancan-1317202885.cos.ap-guangzhou.myqcloud.com/diancan/img/1761686298673_.pic.jpg') no-repeat;
 		background-size: cover;
+		background-position: center center;
+		background-attachment: fixed;
 	}
 </style>
 
 <style lang="less" scoped>
 	.top {
-		margin-top: 200rpx;
+		position: fixed;
+		top: 200rpx;
+		left: 50%;
+		transform: translateX(-50%);
 		text-align: center;
 
 		.title {

@@ -1,4 +1,5 @@
 {
   "navigationBarTitleText": "扫码",
+  "navigationBarBackgroundColor": "#fff",
   "usingComponents": {}
 }

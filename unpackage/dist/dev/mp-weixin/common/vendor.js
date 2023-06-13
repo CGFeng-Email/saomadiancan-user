@@ -28772,7 +28772,25 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
 /* 177 */,
 /* 178 */,
 /* 179 */,
-/* 180 */
+/* 180 */,
+/* 181 */,
+/* 182 */,
+/* 183 */,
+/* 184 */,
+/* 185 */,
+/* 186 */,
+/* 187 */,
+/* 188 */,
+/* 189 */,
+/* 190 */,
+/* 191 */,
+/* 192 */,
+/* 193 */,
+/* 194 */,
+/* 195 */,
+/* 196 */,
+/* 197 */,
+/* 198 */
 /*!************************************************************************************************!*\
   !*** ./node_modules/@dcloudio/vue-cli-plugin-uni/packages/@babel/runtime/regenerator/index.js ***!
   \************************************************************************************************/
@@ -28781,11 +28799,11 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
 
 // TODO(Babel 8): Remove this file.
 
-var runtime = __webpack_require__(/*! @babel/runtime/helpers/regeneratorRuntime */ 181)();
+var runtime = __webpack_require__(/*! @babel/runtime/helpers/regeneratorRuntime */ 199)();
 module.exports = runtime;
 
 /***/ }),
-/* 181 */
+/* 199 */
 /*!*******************************************************************!*\
   !*** ./node_modules/@babel/runtime/helpers/regeneratorRuntime.js ***!
   \*******************************************************************/
@@ -29106,7 +29124,7 @@ function _regeneratorRuntime() {
 module.exports = _regeneratorRuntime, module.exports.__esModule = true, module.exports["default"] = module.exports;
 
 /***/ }),
-/* 182 */
+/* 200 */
 /*!*****************************************************************!*\
   !*** ./node_modules/@babel/runtime/helpers/asyncToGenerator.js ***!
   \*****************************************************************/
@@ -29146,26 +29164,7 @@ function _asyncToGenerator(fn) {
 module.exports = _asyncToGenerator, module.exports.__esModule = true, module.exports["default"] = module.exports;
 
 /***/ }),
-/* 183 */,
-/* 184 */,
-/* 185 */,
-/* 186 */,
-/* 187 */,
-/* 188 */,
-/* 189 */,
-/* 190 */,
-/* 191 */,
-/* 192 */,
-/* 193 */,
-/* 194 */,
-/* 195 */,
-/* 196 */,
-/* 197 */,
-/* 198 */,
-/* 199 */,
-/* 200 */,
-/* 201 */,
-/* 202 */
+/* 201 */
 /*!****************************************************************!*\
   !*** /Users/feng/Desktop/web/saomadiancan-user/utils/order.js ***!
   \****************************************************************/
@@ -29190,7 +29189,7 @@ function codeFn() {
 }
 
 /***/ }),
-/* 203 */
+/* 202 */
 /*!***********************************************************************!*\
   !*** /Users/feng/Desktop/web/saomadiancan-user/utils/saleTimeList.js ***!
   \***********************************************************************/
@@ -29205,8 +29204,8 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.saleTimeClass = void 0;
-var _regenerator = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/regenerator */ 180));
-var _asyncToGenerator2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/asyncToGenerator */ 182));
+var _regenerator = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/regenerator */ 198));
+var _asyncToGenerator2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/asyncToGenerator */ 200));
 var _classCallCheck2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/classCallCheck */ 23));
 var _createClass2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/createClass */ 24));
 // 在开始使用数据库 API 进行增删改查操作之前，需要先获取数据库的引用。
@@ -29226,7 +29225,7 @@ var saleTimeClass = /*#__PURE__*/function () {
     key: "saleTimeFn",
     value: function () {
       var _saleTimeFn = (0, _asyncToGenerator2.default)( /*#__PURE__*/_regenerator.default.mark(function _callee(time, total_account) {
-        var query, num, num_tofixed;
+        var query, price_number, num_tofixed;
         return _regenerator.default.wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
@@ -29256,8 +29255,8 @@ var saleTimeClass = /*#__PURE__*/function () {
               case 10:
                 // 查询到今天的营业额，时间不变，营业额total_account +=
                 // 处理成数字格式
-                num = Number(query.data[0].total_account) + total_account; // 处理价格的浮点数
-                num_tofixed = parseFloat(num.toPrecision(12));
+                price_number = Number(query.data[0].total_account) + total_account; // 处理价格的浮点数
+                num_tofixed = parseFloat(price_number.toPrecision(12));
                 console.log('浮点数', num_tofixed);
                 // 根据id 更新当天营业额的价格
                 _context.next = 15;
@@ -29292,6 +29291,7 @@ exports.saleTimeClass = saleTimeClass;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/wx.js */ 1)["default"]))
 
 /***/ }),
+/* 203 */,
 /* 204 */,
 /* 205 */,
 /* 206 */,
@@ -29299,8 +29299,7 @@ exports.saleTimeClass = saleTimeClass;
 /* 208 */,
 /* 209 */,
 /* 210 */,
-/* 211 */,
-/* 212 */
+/* 211 */
 /*!****************************************************************************************!*\
   !*** /Users/feng/Desktop/web/saomadiancan-user/node_modules/e-commerce_price/index.js ***!
   \****************************************************************************************/

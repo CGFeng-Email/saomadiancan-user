@@ -2,10 +2,10 @@
 	<view class="container">
 		<!-- 顶部 -->
 		<view class="top_view">
-			<view>10人就餐</view>
+			<view>{{number_of_prople}}人就餐</view>
 			<view class="icon">
 				<image src="/static/img/fenxiang.svg" mode="widthFix" class="top-search"></image>
-				<image src="/static/img/dingdan.svg" mode="widthFix"></image>
+				<image src="/static/img/dingdan.svg" mode="widthFix" @click="toMyorder"></image>
 			</view>
 		</view>
 
@@ -127,6 +127,8 @@
 				cuisineCartList: [], // 菜品购物车列表
 				shoppingDetailsShow: false, // 商品详情 显示
 				shoppingDetailsData: {}, // 商品详情数据
+				number_of_prople: null,
+				table_number: null
 			}
 		},
 		methods: {
@@ -355,8 +357,8 @@
 				
 				// 订单数据
 				const orderData = {
-					table_number: '005', // 桌号
-					number_of_people: 3, // 人数
+					table_number: this.table_number, // 桌号
+					number_of_people: this.number_of_people, // 人数
 					total_account, // 总金额
 					order_time: this.$Time().utcOffset(8).format('YYYY-MM-DD  HH:mm:ss'), // 下单时间
 					order_no: codeFn(), // 下单编号
@@ -422,6 +424,7 @@
 					// 生成当天的时间，根据这个日期去查询云数据库是否有今天的数据，有数据就加这一次订单的价格
 					// 没有数据则：往数据库新增一天今天的数据 .add({data: {time, total_account}})
 					const time = this.$Time().utcOffset(8).format('YYYY-MM-DD');
+					// 更新当前的销售额
 					await new saleTimeClass().saleTimeFn(time, total_account);
 					
 					// 关闭当前页 跳转到订单详情页
@@ -451,10 +454,18 @@
 					  }
 					})
 				})
+			},
+			// 跳转我的订单
+			toMyorder() {
+				wx.navigateTo({
+					url: '/pages/my_order/my_order'
+				})
 			}
 		},
 		created() {
 			this.getCuisine()
+			this.table_number = wx.getStorageSync('table_number')
+			this.number_of_prople = wx.getStorageSync('number_of_prople')
 		},
 		computed: {
 			// 计算购物车点菜总数量

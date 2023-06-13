@@ -21,9 +21,9 @@ class saleTimeClass {
 			} else {
 				// 查询到今天的营业额，时间不变，营业额total_account +=
 				// 处理成数字格式
-				const num = Number(query.data[0].total_account) + total_account;
+				const price_number = Number(query.data[0].total_account) + total_account;
 				// 处理价格的浮点数
-				const num_tofixed = parseFloat(num.toPrecision(12))
+				const num_tofixed = parseFloat(price_number.toPrecision(12))
 				console.log('浮点数', num_tofixed);
 				// 根据id 更新当天营业额的价格
 				await sale_time_list_api.doc(query.data[0]._id).update({data: {
