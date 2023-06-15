@@ -100,7 +100,6 @@
 	import { codeFn } from '../../utils/order.js';
 	// 计算当天销售额
 	import {saleTimeClass} from '../../utils/saleTimeList.js';
-	
 	// 在开始使用数据库 API 进行增删改查操作之前，需要先获取数据库的引用。
 	const db = wx.cloud.database();
 	// 数据库操作符

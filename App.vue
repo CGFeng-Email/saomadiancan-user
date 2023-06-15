@@ -5,12 +5,13 @@
 			wx.cloud.init({
 				env: 'diancan-1gbnagvw311f423e'
 			})
+			
 		},
-		onShow: function() {
+		onShow() {
 
 		},
-		onHide: function() {
-
+		methods: {
+			
 		}
 	}
 </script>
@@ -18,4 +19,3 @@
 <style>
 	/*每个页面公共css */
 </style>
-  
