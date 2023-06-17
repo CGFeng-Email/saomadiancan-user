@@ -28766,7 +28766,52 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
 });
 
 /***/ }),
-/* 174 */,
+/* 174 */
+/*!****************************************************************************!*\
+  !*** /Users/feng/Desktop/web/saomadiancan-user/utils/onShareAppMessage.js ***!
+  \****************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+var _default = {
+  data: function data() {
+    return {
+      share: {
+        title: '自定义分享标题',
+        // 没有的话 当前小程序名称
+        imageUrl: 'https://ossweb-img.qq.com/images/lol/web201310/skin/big10001.jpg',
+        // 没有的话 使用默认截图
+        path: '/pages/index/index' // 当前页面 path ，必须是以 / 开头的完整路径
+      }
+    };
+  },
+  //发送给朋友
+  onShareAppMessage: function onShareAppMessage(res) {
+    return {
+      title: this.share.title,
+      imageUrl: this.share.imageUrl,
+      path: this.share.path
+    };
+  },
+  //分享到朋友圈
+  onShareTimeline: function onShareTimeline(res) {
+    return {
+      title: this.share.title,
+      imageUrl: this.share.imageUrl,
+      path: this.share.path
+    };
+  }
+};
+exports.default = _default;
+
+/***/ }),
 /* 175 */,
 /* 176 */,
 /* 177 */,
@@ -28780,7 +28825,8 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
 /* 185 */,
 /* 186 */,
 /* 187 */,
-/* 188 */
+/* 188 */,
+/* 189 */
 /*!************************************************************************************************!*\
   !*** ./node_modules/@dcloudio/vue-cli-plugin-uni/packages/@babel/runtime/regenerator/index.js ***!
   \************************************************************************************************/
@@ -28789,11 +28835,11 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
 
 // TODO(Babel 8): Remove this file.
 
-var runtime = __webpack_require__(/*! @babel/runtime/helpers/regeneratorRuntime */ 189)();
+var runtime = __webpack_require__(/*! @babel/runtime/helpers/regeneratorRuntime */ 190)();
 module.exports = runtime;
 
 /***/ }),
-/* 189 */
+/* 190 */
 /*!*******************************************************************!*\
   !*** ./node_modules/@babel/runtime/helpers/regeneratorRuntime.js ***!
   \*******************************************************************/
@@ -29114,7 +29160,7 @@ function _regeneratorRuntime() {
 module.exports = _regeneratorRuntime, module.exports.__esModule = true, module.exports["default"] = module.exports;
 
 /***/ }),
-/* 190 */
+/* 191 */
 /*!*****************************************************************!*\
   !*** ./node_modules/@babel/runtime/helpers/asyncToGenerator.js ***!
   \*****************************************************************/
@@ -29154,7 +29200,6 @@ function _asyncToGenerator(fn) {
 module.exports = _asyncToGenerator, module.exports.__esModule = true, module.exports["default"] = module.exports;
 
 /***/ }),
-/* 191 */,
 /* 192 */,
 /* 193 */,
 /* 194 */,
@@ -29164,7 +29209,8 @@ module.exports = _asyncToGenerator, module.exports.__esModule = true, module.exp
 /* 198 */,
 /* 199 */,
 /* 200 */,
-/* 201 */
+/* 201 */,
+/* 202 */
 /*!****************************************************************!*\
   !*** /Users/feng/Desktop/web/saomadiancan-user/utils/order.js ***!
   \****************************************************************/
@@ -29189,7 +29235,7 @@ function codeFn() {
 }
 
 /***/ }),
-/* 202 */
+/* 203 */
 /*!***********************************************************************!*\
   !*** /Users/feng/Desktop/web/saomadiancan-user/utils/saleTimeList.js ***!
   \***********************************************************************/
@@ -29204,8 +29250,8 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.saleTimeClass = void 0;
-var _regenerator = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/regenerator */ 188));
-var _asyncToGenerator2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/asyncToGenerator */ 190));
+var _regenerator = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/regenerator */ 189));
+var _asyncToGenerator2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/asyncToGenerator */ 191));
 var _classCallCheck2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/classCallCheck */ 23));
 var _createClass2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/createClass */ 24));
 // 在开始使用数据库 API 进行增删改查操作之前，需要先获取数据库的引用。
@@ -29291,7 +29337,6 @@ exports.saleTimeClass = saleTimeClass;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/wx.js */ 1)["default"]))
 
 /***/ }),
-/* 203 */,
 /* 204 */,
 /* 205 */,
 /* 206 */,
@@ -29299,7 +29344,8 @@ exports.saleTimeClass = saleTimeClass;
 /* 208 */,
 /* 209 */,
 /* 210 */,
-/* 211 */
+/* 211 */,
+/* 212 */
 /*!****************************************************************************************!*\
   !*** /Users/feng/Desktop/web/saomadiancan-user/node_modules/e-commerce_price/index.js ***!
   \****************************************************************************************/
@@ -29322,91 +29368,6 @@ var Price = function Price(price) {
   return s;
 };
 module.exports = Price;
-
-/***/ }),
-/* 212 */,
-/* 213 */,
-/* 214 */,
-/* 215 */,
-/* 216 */,
-/* 217 */,
-/* 218 */,
-/* 219 */,
-/* 220 */,
-/* 221 */,
-/* 222 */,
-/* 223 */,
-/* 224 */,
-/* 225 */,
-/* 226 */,
-/* 227 */,
-/* 228 */,
-/* 229 */,
-/* 230 */,
-/* 231 */,
-/* 232 */,
-/* 233 */,
-/* 234 */,
-/* 235 */,
-/* 236 */,
-/* 237 */,
-/* 238 */,
-/* 239 */,
-/* 240 */,
-/* 241 */,
-/* 242 */,
-/* 243 */,
-/* 244 */,
-/* 245 */,
-/* 246 */,
-/* 247 */,
-/* 248 */,
-/* 249 */,
-/* 250 */,
-/* 251 */
-/*!****************************************************************************!*\
-  !*** /Users/feng/Desktop/web/saomadiancan-user/utils/onShareAppMessage.js ***!
-  \****************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-var _default = {
-  data: function data() {
-    return {
-      share: {
-        title: '自定义分享标题',
-        // 没有的话 当前小程序名称
-        imageUrl: 'https://ossweb-img.qq.com/images/lol/web201310/skin/big10001.jpg',
-        // 没有的话 使用默认截图
-        path: '/pages/index/index' // 当前页面 path ，必须是以 / 开头的完整路径
-      }
-    };
-  },
-  //发送给朋友
-  onShareAppMessage: function onShareAppMessage(res) {
-    return {
-      title: this.share.title,
-      imageUrl: this.share.imageUrl,
-      path: this.share.path
-    };
-  },
-  //分享到朋友圈
-  onShareTimeline: function onShareTimeline(res) {
-    return {
-      title: this.share.title,
-      imageUrl: this.share.imageUrl,
-      path: this.share.path
-    };
-  }
-};
-exports.default = _default;
 
 /***/ })
 ]]);

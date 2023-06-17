@@ -3,6 +3,7 @@
   "navigationBarBackgroundColor": "#fcd267",
   "usingComponents": {
     "s-h-o-p-p-i-n-g-l-i-s-t": "/pages/diancan/components/shoppingList",
-    "s-h-o-p-p-i-n-g-d-e-t-a-i-l-s": "/pages/diancan/components/shoppingDetails"
+    "s-h-o-p-p-i-n-g-d-e-t-a-i-l-s": "/pages/diancan/components/shoppingDetails",
+    "s-k-e-l-e-t-o-n": "/pages/skeleton-view/home"
   }
 }

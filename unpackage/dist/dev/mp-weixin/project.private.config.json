@@ -21,6 +21,13 @@
           "query": "",
           "launchMode": "default",
           "scene": null
+        },
+        {
+          "name": "点餐",
+          "pathName": "pages/diancan/diancan",
+          "query": "",
+          "launchMode": "default",
+          "scene": null
         }
       ]
     }

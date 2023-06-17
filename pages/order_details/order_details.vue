@@ -1,83 +1,85 @@
 <!-- 订单详情 -->
 <template>
 	<view class="order_details">
-		<view class="bg"></view>
-		<view class="top_bg"></view>
-		<view class="head">
-			<view class="title">
-				下单成功，坐等开吃
+		<div class="container" v-if="!skeleton_loading">
+			<view class="bg"></view>
+			<view class="top_bg"></view>
+			<view class="head">
+				<view class="title">
+					下单成功，坐等开吃
+				</view>
+				<view class="sub_title">
+					菜品已在制作中
+				</view>
 			</view>
-			<view class="sub_title">
-				菜品已在制作中
-			</view>
-		</view>
-		<view class="order_list">
-			<view class="order_content">
-				<view class="item" v-for="(item, index) in sliceList" :key="index">
-					<view class="order_an_number">
-						<view class="left">
-							第{{sliceList.length - index}}次下单
+			<view class="order_list">
+				<view class="order_content">
+					<view class="item" v-for="(item, index) in sliceList" :key="index">
+						<view class="order_an_number">
+							<view class="left">
+								第{{sliceList.length - index}}次下单
+							</view>
+							<view class="right">
+								下单成功，坐等开吃
+							</view>
 						</view>
-						<view class="right">
-							下单成功，坐等开吃
-						</view>
-					</view>
-					<view class="list">
-						<view class="l_item" v-for="(item2, index2) in item.list" :key="index2">
-							<div class="l_item_wrap">
-								<view class="cover">
-									<image
-										:src="item2.image">
-									</image>
-								</view>
-								<view class="content">
-									<view class="c_top">
-										<view class="name">
-											{{item2.name}}
+						<view class="list">
+							<view class="l_item" v-for="(item2, index2) in item.list" :key="index2">
+								<div class="l_item_wrap">
+									<view class="cover">
+										<image :src="item2.image">
+										</image>
+									</view>
+									<view class="content">
+										<view class="c_top">
+											<view class="name">
+												{{item2.name}}
+											</view>
+											<view class="account">
+												¥{{priceZero(Number(item2.price))}}
+											</view>
 										</view>
-										<view class="account">
-											¥{{priceZero(Number(item2.price))}}
+										<view class="shopping_number">
+											{{item2.salesVolume}}{{item2.unit}}
 										</view>
 									</view>
-									<view class="shopping_number">
-										{{item2.salesVolume}}{{item2.unit}}
-									</view>
-								</view>
-							</div>
+								</div>
+							</view>
+						</view>
+
+						<view class="more" v-if="item.max > 3" @click="itemMore(index)">
+							<text class="text">展开全部</text>
+							<i :class="['iconfont', orderMore ? 'icon-xiangshang' : 'icon-xiala']"></i>
 						</view>
 					</view>
-					
-					<view class="more" v-if="item.max > 3" @click="itemMore(index)">
-						<text class="text">展开全部</text>
-						<i :class="['iconfont', orderMore ? 'icon-xiangshang' : 'icon-xiala']"></i>
+
+					<view class="total_account">
+						<text class="number">共 {{total_number}} 份</text>
+						<text class="total_price">总计：¥{{priceZero(Number(order_data.total_account))}}</text>
 					</view>
 				</view>
-
-				<view class="total_account">
-					<text class="number">共 {{total_number}} 份</text>
-					<text class="total_price">总计：¥{{priceZero(Number(order_data.total_account))}}</text>
+			</view>
+			<view class="bottom_order">
+				<view class="info">
+					<view class="lis order_in">
+						订单编号：{{order_data.order_no}}
+					</view>
+					<view class="lis order_time">
+						下单时间：{{order_data.order_time}}
+					</view>
+					<view class="lis table_number">
+						桌号名称：{{order_data.table_number}}
+					</view>
 				</view>
 			</view>
-		</view>
-		<view class="bottom_order">
-			<view class="info">
-				<view class="lis order_in">
-					订单编号：{{order_data.order_no}}
+			<div class="bottom_add_btn">
+				<view class="add_order" @click="addOrder">
+					加菜
 				</view>
-				<view class="lis order_time">
-					下单时间：{{order_data.order_time}}
-				</view>
-				<view class="lis table_number">
-					桌号名称：{{order_data.table_number}}
-				</view>
-			</view>
-		</view>
-
-		<div class="bottom_add_btn">
-			<view class="add_order" @click="addOrder">
-				加菜
-			</view>
+			</div>
 		</div>
+		<!-- 骨架屏 -->
+		<SKELETON v-if="skeleton_loading"></SKELETON>
 	</view>
 </template>
 
@@ -86,8 +88,15 @@
 	const db = wx.cloud.database();
 	// 订单 api
 	const orderDataApi = db.collection('orderData');
-	import priceZero from 'e-commerce_price'
+	// 价格补0插件
+	import priceZero from 'e-commerce_price';
+	// 骨架屏
+	import SKELETON from './components/skeleton.vue';
+
 	export default {
+		components: {
+			SKELETON
+		},
 		data() {
 			return {
 				priceZero, // 初始化一下补0
@@ -95,10 +104,8 @@
 				order_data: {}, // 订单数据
 				sliceList: [], // 前三项
 				totalList: [], // 总数据
+				skeleton_loading: true, // 骨架屏加载
 			}
-		},
-		mounted() {
-
 		},
 		onLoad(params) {
 			this.getOrderData(params.table_number)
@@ -106,11 +113,11 @@
 		methods: {
 			// 不能根据openid去获取订单 因为是提交生成的订单 直接跳转到该页面 无法携带id 可以携带桌号进行获取
 			async getOrderData(table_number) {
-				
+
 				try {
 					wx.showLoading({
-					  title: '加载中',
-					  mask: true
+						title: '加载中',
+						mask: true
 					})
 
 					// 获取当前的订单
@@ -120,12 +127,12 @@
 					}).get();
 					console.log('res', res);
 					const data = res.data[0];
-					
+
 					// 总份数
 					data.place_an_order.forEach(item => {
 						return this.total_number += item.shopping_list.length
 					})
-					
+
 					// 价格总计，订单编号，下单时间，桌号
 					this.order_data = {
 						order_no: data.order_no,
@@ -142,12 +149,13 @@
 					})
 					// 总数据数组 准备好总数据 点击展开的时候 把对应的列表替换截取的列表
 					this.totalList = data.place_an_order;
-					wx.hideLoading()
+					wx.hideLoading();
+					this.skeleton_loading = false;
 				} catch (e) {
 					wx.showToast({
-					  title: '加载出错',
-					  icon: 'error',
-					  mask: true
+						title: '加载出错',
+						icon: 'error',
+						mask: true
 					})
 				}
 			},

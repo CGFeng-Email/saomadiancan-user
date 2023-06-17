@@ -1,6 +1,6 @@
 <template>
 	<view class="container">
-
+		
 		<view class="top">
 			<view class="title">欢迎来到</view>
 			<view class="title">全易餐饮店</view>
@@ -24,10 +24,11 @@
 			</view>
 		</view>
 	</view>
+	
 </template>
 
 <script>
-	const db = wx.cloud.database()
+	const db = wx.cloud.database();
 	const orderDataApi = db.collection('orderData');
 	export default {
 		data() {
@@ -40,24 +41,24 @@
 		onLoad(e) {
 			console.log('e', e);
 			this.table_number = e.number
+			// 扫码识别桌号
 			wx.setStorageSync('table_number', e.number);
 			this.verify()
 		},
 		methods: {
 			// 就餐人数
 			itemClick(item) {
-				console.log(item);
 				this.number_of_prople = item
 			},
+			// 跳转点餐页
 			btn() {
-				// 跳转点餐页
 				if (this.number_of_prople <= 0) return false;
-				console.log('提交');
+				wx.setStorageSync('number_of_prople', this.number_of_prople)
 				wx.redirectTo({
 					url: '/pages/diancan/diancan'
 				})
 			},
-			// 验证当前桌号是否已结账
+			// 进入页面 验证当前桌号是否已结账
 			async verify() {
 				const res = await orderDataApi.where({order_status: 'yes', table_number: this.table_number}).get();
 				console.log('res', res);

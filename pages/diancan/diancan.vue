@@ -1,7 +1,7 @@
 <template>
 	<view class="container">
 		<!-- 顶部 -->
-		<view class="top_view">
+		<view class="top_view" v-if="!skeleton_loading">
 			<view>{{number_of_prople}}人就餐</view>
 			<view class="icon">
 				<image src="/static/img/fenxiang.svg" mode="widthFix" class="top-search"></image>
@@ -10,7 +10,7 @@
 		</view>
 
 		<!-- 点餐界面 -->
-		<view class="order_view">
+		<view class="order_view" v-if="!skeleton_loading">
 			<!-- 点餐主体 -->
 			<view class="common">
 				<view class="left">
@@ -34,7 +34,8 @@
 								<view class="classify">{{item.category}}</view>
 								<block v-for="(item2, index2) in item.list" :key="index2">
 									<!-- 当前分类下的商品 -->
-									<view class="classify_goods" @click="openShoppingDetails(true, index, index2, item2, item.cid)">
+									<view class="classify_goods"
+										@click="openShoppingDetails(true, index, index2, item2, item.cid)">
 										<!-- 商品图片 -->
 										<view class="goods_image">
 											<image class="img" :src="item2.image"></image>
@@ -52,9 +53,11 @@
 										</view>
 										<view class="quantity" :class="item2.salesVolume == 0 ? 'item_right' : ''">
 											<image v-if="item2.salesVolume > 0" src="/static/img/jianhao.png"
-												mode="widthFix" @click.stop="reduce(index,index2,item2,item.cid)"></image>
+												mode="widthFix" @click.stop="reduce(index,index2,item2,item.cid)">
+											</image>
 											<text v-if="item2.salesVolume > 0">{{item2.salesVolume}}</text>
-											<image src="/static/img/jia.png" mode="widthFix" @click.stop="plus(index,index2,item2,item.cid)"></image>
+											<image src="/static/img/jia.png" mode="widthFix"
+												@click.stop="plus(index,index2,item2,item.cid)"></image>
 										</view>
 									</view>
 								</block>
@@ -75,15 +78,18 @@
 				</view>
 				<view class="text" v-if="totalCartCuisineNuumber > 0">已点{{totalCartCuisineNuumber}}份菜品</view>
 				<view class="place_btn">
-					<button plain="true" open-type="getUserInfo" @click.stop="totalCartCuisineNuumber == 0 ? false : true && submit_order()">选好了</button>
+					<button plain="true" open-type="getUserInfo"
+						@click.stop="totalCartCuisineNuumber == 0 ? false : true && submit_order()">选好了</button>
 				</view>
 			</view>
-			
+
 			<!-- 购物车商品弹窗列表 -->
 			<SHOPPINGLIST v-if="cartShoppingLingShow" :cuisineCartList="cuisineCartList"></SHOPPINGLIST>
 			<!-- 购物车商品详情 -->
 			<SHOPPINGDETAILS v-if="shoppingDetailsShow" :shoppingDetailsData="shoppingDetailsData"></SHOPPINGDETAILS>
 		</view>
+		<!-- 骨架屏 -->
+		<SKELETON v-if="skeleton_loading"></SKELETON>
 	</view>
 </template>
 
@@ -96,10 +102,17 @@
 	import SHOPPINGLIST from './components/shoppingList.vue';
 	// 商品详情组件
 	import SHOPPINGDETAILS from './components/shoppingDetails.vue';
+	// 骨架屏
+	import SKELETON from '../skeleton-view/home.vue';
+	
 	// 随机订单号
-	import { codeFn } from '../../utils/order.js';
+	import {
+		codeFn
+	} from '../../utils/order.js';
 	// 计算当天销售额
-	import {saleTimeClass} from '../../utils/saleTimeList.js';
+	import {
+		saleTimeClass
+	} from '../../utils/saleTimeList.js';
 	// 在开始使用数据库 API 进行增删改查操作之前，需要先获取数据库的引用。
 	const db = wx.cloud.database();
 	// 数据库操作符
@@ -108,11 +121,12 @@
 	const orderData_Api = db.collection('orderData');
 	// 菜品，商品 云数据库 api
 	const cuisineList_Api = db.collection('cuisineList');
-	
+
 	export default {
 		components: {
 			SHOPPINGLIST,
-			SHOPPINGDETAILS
+			SHOPPINGDETAILS,
+			SKELETON
 		},
 		data() {
 			return {
@@ -126,8 +140,9 @@
 				cuisineCartList: [], // 菜品购物车列表
 				shoppingDetailsShow: false, // 商品详情 显示
 				shoppingDetailsData: {}, // 商品详情数据
-				number_of_prople: null,
-				table_number: null
+				number_of_prople: null, // 就餐人数
+				table_number: null, // 桌号
+				skeleton_loading: true, // 骨架屏加载
 			}
 		},
 		methods: {
@@ -157,6 +172,7 @@
 						})
 						// console.log('rightTopList', this.rightTopList);
 					})
+					this.skeleton_loading = false;
 				})
 			},
 			// 左侧类目点击
@@ -174,19 +190,19 @@
 				// 滚动时距离顶部的高度
 				let scrollTop = event.detail.scrollTop;
 				// console.log('scroll', scrollTop);
-				
-				if(scrollTop >= this.topHeight) {
+
+				if (scrollTop >= this.topHeight) {
 					// console.log('上拉');
-					if(scrollTop >= this.rightTopList[this.cuisineCategoryIndex]) {
+					if (scrollTop >= this.rightTopList[this.cuisineCategoryIndex]) {
 						this.cuisineCategoryIndex += 1
 					}
 				} else {
 					// console.log('下拉');
-					if(scrollTop < this.rightTopList[this.cuisineCategoryIndex -1]) {
+					if (scrollTop < this.rightTopList[this.cuisineCategoryIndex - 1]) {
 						this.cuisineCategoryIndex -= 1
 					}
 				}
-				
+
 				this.topHeight = scrollTop;
 			},
 			// 右侧菜品列表滚动到底部触发
@@ -194,12 +210,14 @@
 				console.log('滚动到底部触发');
 			},
 			// 单个商品加
-			plus(index,index2,item2,cid) {
+			plus(index, index2, item2, cid) {
 				// console.log(index, index2, item2, cid);
 				// 解构出当前商品的添加数量
-				const {salesVolume} = item2;
+				const {
+					salesVolume
+				} = item2;
 				const addNum = Number(salesVolume) + 1;
-				this.$set(this.cuisineList[index].list[index2],'salesVolume',addNum);
+				this.$set(this.cuisineList[index].list[index2], 'salesVolume', addNum);
 				// 生成删减出菜品购物车列表的菜品对象
 				const cuisineItem = {
 					price: Number(item2.price) * addNum,
@@ -216,11 +234,13 @@
 				this.addShoppingCart(cuisineItem)
 			},
 			// 单个商品减
-			reduce(index,index2,item2,cid) {
+			reduce(index, index2, item2, cid) {
 				// 解构出当前商品的添加数量
-				const {salesVolume} = item2;
+				const {
+					salesVolume
+				} = item2;
 				const addNum = Number(salesVolume) - 1;
-				this.$set(this.cuisineList[index].list[index2],'salesVolume',addNum)
+				this.$set(this.cuisineList[index].list[index2], 'salesVolume', addNum)
 				// 生成添加进菜品购物车列表的菜品对象
 				const cuisineItem = {
 					price: Number(item2.price) * addNum,
@@ -233,7 +253,7 @@
 					index,
 					index2
 				}
-				
+
 				// 添加，减少商品进购物车
 				this.addShoppingCart(cuisineItem)
 			},
@@ -246,7 +266,7 @@
 				// console.log('cuisineItem', cuisineItem);
 				// console.log('cuisineCartList', this.cuisineCartList);
 				// 菜品购物车列表 - 空数组，没有数据。
-				if(this.cuisineCartList.length == 0) {
+				if (this.cuisineCartList.length == 0) {
 					this.cuisineCartList.push(cuisineItem)
 				} else {
 					// 菜品购物车列表 - 有数据
@@ -255,14 +275,14 @@
 					// console.log('cuisineIndex', cuisineIndex);
 					// cuisineIndex: -1, 没有相同菜品
 					// cuisineIndex: 1, 相同的菜品
-					if(cuisineIndex == -1) {
+					if (cuisineIndex == -1) {
 						this.cuisineCartList.unshift(cuisineItem)
 					} else {
 						this.$set(this.cuisineCartList[cuisineIndex], 'salesVolume', cuisineItem.salesVolume);
 						this.$set(this.cuisineCartList[cuisineIndex], 'price', cuisineItem.price);
 					}
 				}
-				
+
 				// 计算左边菜品类目 各分类下添加了多少菜品
 				this.calculateLeftCuisineCategory()
 			},
@@ -273,21 +293,24 @@
 				this.cuisineCartList.forEach(item => {
 					// console.log('item', item);
 					// 有相同的分类就叠加当前分类下的添加菜品数量
-					if(obj[item.cid]) {
+					if (obj[item.cid]) {
 						obj[item.cid] += item.salesVolume
 					} else {
 						obj[item.cid] = item.salesVolume
 					}
 				})
-				
+
 				// 处理成数组
 				const arr = [];
 				// 循环对象
-				for(let k in obj) {
+				for (let k in obj) {
 					// console.log('k', k);
-					arr.push({cid: k, salesVolume: obj[k]})
+					arr.push({
+						cid: k,
+						salesVolume: obj[k]
+					})
 				}
-				
+
 				// 查询出当前分类菜品索引，更新左侧分类列表，同步左侧菜品分类下的数量
 				arr.forEach(item => {
 					// 查找左侧分类下的菜品类目id == 当前菜品类目的id
@@ -296,7 +319,7 @@
 					this.$set(this.cuisineCategory[index], 'sele_quantity', item.salesVolume)
 				})
 			},
-			
+
 			// 购物车菜品加减数量同步
 			cartCuisinePlusReduce(parameter) {
 				// console.log('parameter', parameter);
@@ -304,13 +327,14 @@
 				// 同步数量
 				this.$set(this.cuisineCartList[parameter.cartCuisineIndex], 'salesVolume', parameter.salesVolume);
 				// 同步价格
-				this.$set(this.cuisineCartList[parameter.cartCuisineIndex], 'price', parameter.price * parameter.salesVolume)
-				
+				this.$set(this.cuisineCartList[parameter.cartCuisineIndex], 'price', parameter.price * parameter
+					.salesVolume)
+
 				// 同步右侧菜品列表加减数量，价格
 				const index = this.cuisineList.findIndex(item => item.cid == parameter.cid)
 				// console.log('index', index);
 				this.$set(this.cuisineList[index].list[parameter.index2], 'salesVolume', parameter.salesVolume)
-				
+
 				// 同步左侧菜品分类点菜数量
 				this.calculateLeftCuisineCategory()
 			},
@@ -345,15 +369,15 @@
 			},
 			// 提交订单
 			async submit_order() {
-				
+
 				// 过滤掉购物车里总价为0的商品
 				const orderList = this.cuisineCartList.filter(item => item.price != 0);
-				
+
 				// 计算总价
 				let total_account = 0;
 				orderList.forEach(item => total_account += item.price);
 				// console.log('orderList', orderList);
-				
+
 				// 订单数据
 				const orderData = {
 					table_number: this.table_number, // 桌号
@@ -363,82 +387,94 @@
 					order_no: codeFn(), // 下单编号
 					order_status: 'no', // 订单状态 no:未接单, yes:已接单
 					order_settle_account: 'no', // 结账状态 no: 未结账, yes: 已结账
-					place_an_order: [ {shopping_list: orderList}] // 下单列表
+					place_an_order: [{
+						shopping_list: orderList
+					}] // 下单列表
 				}
 				// console.log('orderData', orderData);
-				
+
 				// 提交订单时，给客户发起订单订阅消息。让客户开启订阅通知功能 不然无法接收到订阅通知 这个要开启node后台
 				await this.subscribeMessage();
-				
+
 				// 显示下单加载图标
 				wx.showLoading({
-				  title: '正在下单',
+					title: '正在下单',
 				})
-				
+
 				try {
 					// 1.发起请求。 获取云数据库中的订单数据 
 					// 2.提交订单要考虑加菜。依据order_status订单状态 no:未接单, yes:已接单
 					// 3.当前桌号table_number
 					// 4.fieLd: 指定需要返回的字段
-					const query = await orderData_Api.where({table_number: `${orderData.table_number}`, order_status: 'yes'}).field({_id: true, total_account: true}).get();
+					const query = await orderData_Api.where({
+						table_number: `${orderData.table_number}`,
+						order_status: 'yes'
+					}).field({
+						_id: true,
+						total_account: true
+					}).get();
 					console.log('query', query);
-					
-					if(query.data.length == 0) {
+
+					if (query.data.length == 0) {
 						console.log('第一次来，已结账');
 						// 1.客户初次来店下单
 						// 2.之前吃过了, 已经结账了
 						// 3.把订单提交到数据库
-						await orderData_Api.add({data: orderData})
+						await orderData_Api.add({
+							data: orderData
+						})
 					} else {
 						console.log('加菜');
 						// 1.同样的桌号
 						// 2.加菜
-						
+
 						// 计算出加菜后的总价格
 						const add_total_account = Number(query.data[0].total_account) + total_account;
-						
+
 						// 更新数据库
 						// 每次加菜都会把接单状态初始化为未接单
 						await orderData_Api.doc(query.data[0]._id).update({
 							data: {
 								total_account: add_total_account,
 								order_status: orderData.order_status,
-								place_an_order: _.unshift({shopping_list: orderList})
+								place_an_order: _.unshift({
+									shopping_list: orderList
+								})
 							}
 						})
 					}
-					
+
 					// 对商品已售量自增
 					orderList.forEach(async item => {
 						console.log('自增item', item);
 						// forEach 里面的await 外面的async 无效的 要在forEach里面放 async
 						const getCuisineListApi = await cuisineList_Api.doc(item._id).update({
-						  data: {
-							sold_out: _.inc(item.salesVolume)
-						  }
+							data: {
+								sold_out: _.inc(item.salesVolume)
+							}
 						})
 					})
-					
+
 					// 计算当天的销售额
 					// 生成当天的时间，根据这个日期去查询云数据库是否有今天的数据，有数据就加这一次订单的价格
 					// 没有数据则：往数据库新增一天今天的数据 .add({data: {time, total_account}})
 					const time = this.$Time().utcOffset(8).format('YYYY-MM-DD');
 					// 更新当前的销售额
 					await new saleTimeClass().saleTimeFn(time, total_account);
-					
+
 					// 关闭当前页 跳转到订单详情页
 					wx.redirectTo({
-					  url: `/pages/order_details/order_details?table_number=${orderData.table_number}`,
-					  complete: () => {
-						// 关闭加载弹窗
-						wx.hideLoading()
-					  }
+						url: `/pages/order_details/order_details?table_number=${orderData.table_number}`,
+						complete: () => {
+							// 关闭加载弹窗
+							wx.hideLoading()
+						}
 					})
-					
-				} catch(err) {
+
+				} catch (err) {
 					wx.showToast({
-					  title: '发生错误',
-					  icon: 'error'
+						title: '发生错误',
+						icon: 'error'
 					})
 				}
 			},
@@ -447,10 +483,10 @@
 				// tmplIds: 要跟后台的id相匹配
 				return new Promise((resolve, reject) => {
 					wx.requestSubscribeMessage({
-					  tmplIds: ['uDf_R5R4uQ8jsyEhPojMIdOE3FwRq7IIWXNj0sb1m5I'],
-					  success: res => {
-						resolve(res)
-					  }
+						tmplIds: ['uDf_R5R4uQ8jsyEhPojMIdOE3FwRq7IIWXNj0sb1m5I'],
+						success: res => {
+							resolve(res)
+						}
 					})
 				})
 			},
@@ -462,9 +498,9 @@
 			}
 		},
 		created() {
-			this.getCuisine()
 			this.table_number = wx.getStorageSync('table_number')
 			this.number_of_prople = wx.getStorageSync('number_of_prople')
+			this.getCuisine()
 		},
 		computed: {
 			// 计算购物车点菜总数量
@@ -476,7 +512,7 @@
 				return total
 			}
 		}
-		
+
 	}
 </script>
 

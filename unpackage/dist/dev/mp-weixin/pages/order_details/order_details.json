@@ -1,4 +1,6 @@
 {
   "navigationBarTitleText": "订单详情",
-  "usingComponents": {}
+  "usingComponents": {
+    "s-k-e-l-e-t-o-n": "/pages/order_details/components/skeleton"
+  }
 }
